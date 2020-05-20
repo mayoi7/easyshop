@@ -1,0 +1,53 @@
+HELP.md
+target/
+
+### Logs ###
+*.log
+
+### Test Files ###
+test/
+tests/
+
+### Vue ###
+node_modules/
+/dist/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+### local env files ###
+.env.local
+.env.*.local
+
+### Except ###
+#!application.yml
+#!/src/main/java/*.java
+#!.mvn/wrapper/maven-wrapper.jar
+#!pom.xml
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+
+### VS Code ###
+.vscode/
+

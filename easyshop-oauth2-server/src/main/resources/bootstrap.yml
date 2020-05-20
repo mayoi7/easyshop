@@ -1,0 +1,20 @@
+server:
+  port: 9000
+spring:
+  application:
+    name: easyshop-oauth2-server
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+      config:
+        server-addr: localhost:8848
+        namespace: 9a1cb6c8-7909-4aef-bd16-71de1b274b7c
+        file-extension: yaml
+        group: EASYSHOP
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
