@@ -51,6 +51,8 @@ public class ResponseResult<T> {
     public enum StateCode {
         /** 请求成功 */
         OK(20000, "Success"),
+        /** 参数错误 */
+        ILLEGAL_PARAM(40001, "Illegal param"),
         /** 请求失败 */
         FAIL(50000, "Fail"),
         /** token不合法 */

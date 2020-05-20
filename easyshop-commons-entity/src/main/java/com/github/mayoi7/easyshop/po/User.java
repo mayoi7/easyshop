@@ -42,4 +42,9 @@ public class User implements Serializable {
 
     @Column(name = "update_time" )
     private Date updateTime;
+
+    public User(String name, String password) {
+        this.name = name;
+        this.password = password;
+    }
 }
