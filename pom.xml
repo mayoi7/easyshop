@@ -17,6 +17,7 @@
         <module>easyshop-server-commodity</module>
         <module>easyshop-gateway</module>
         <module>easyshop-data-statistic</module>
+        <module>easyshop-cache-provider</module>
     </modules>
     <properties>
         <!-- Environment Settings -->
@@ -37,6 +38,7 @@
         <hikari.version>3.3.1</hikari.version>
         <tk.mybatis.version>2.1.5</tk.mybatis.version>
         <druid.version>1.1.20</druid.version>
+        <jedis.version>2.9.0</jedis.version>
     </properties>
 
     <dependencyManagement>
@@ -97,6 +99,11 @@
             </dependency>
 
             <!-- database -->
+            <dependency>
+                <groupId>redis.clients</groupId>
+                <artifactId>jedis</artifactId>
+                <version>${jedis.version}</version>
+            </dependency>
             <dependency>
                 <groupId>mysql</groupId>
                 <artifactId>mysql-connector-java</artifactId>

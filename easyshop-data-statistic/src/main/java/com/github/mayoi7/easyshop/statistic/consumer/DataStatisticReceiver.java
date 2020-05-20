@@ -4,11 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.github.mayoi7.easyshop.constant.RedisKeys;
 import com.github.mayoi7.easyshop.dto.TransData;
 import com.github.mayoi7.easyshop.service.RedisService;
-import com.github.mayoi7.easyshop.service.StatisticService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.annotation.StreamListener;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -39,6 +36,6 @@ public class DataStatisticReceiver {
             log.error("[MESSAGE] msg convert fail <msg_json={}>", transDataJson);
             return;
         }
-        redisService.addAndGet(RedisKeys.TRANSACTION_DATA_KEY, transData.getAmount().doubleValue());
+        redisService.addAndGet(RedisKeys.TRANSACTION_DATA, transData.getAmount().doubleValue());
     }
 }

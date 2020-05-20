@@ -1,9 +1,7 @@
 package com.github.mayoi7.easyshop.server.controller;
 
 import com.github.mayoi7.easyshop.dto.ResponseResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author LiuHaonan
@@ -17,5 +15,10 @@ public class OrderController {
     @GetMapping("/test")
     public ResponseResult<Void> health() {
         return ResponseResult.SUCCESS;
+    }
+
+    @PostMapping("/")
+    public ResponseResult<Integer> placeOrder() {
+        return null;
     }
 }

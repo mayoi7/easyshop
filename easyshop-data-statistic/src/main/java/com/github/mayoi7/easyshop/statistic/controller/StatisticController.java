@@ -5,7 +5,6 @@ import com.github.mayoi7.easyshop.dto.ResponseResult;
 import com.github.mayoi7.easyshop.dto.ResponseResult.StateCode;
 import com.github.mayoi7.easyshop.service.RedisService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,7 +27,7 @@ public class StatisticController {
 
     @GetMapping("/trans")
     public ResponseResult<BigDecimal> countTransactionRecord() {
-        Double total = redisService.count(RedisKeys.TRANSACTION_DATA_KEY);
+        Double total = redisService.count(RedisKeys.TRANSACTION_DATA);
         if (total == null) {
             // TODO: 2020/5/18 改为从数据库中进行统计
             log.error("[STATISTIC] total transaction record is null in redis");

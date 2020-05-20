@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.github.mayoi7.easyshop.dto.ResponseResult;
 import com.github.mayoi7.easyshop.po.Commodity;
 import com.github.mayoi7.easyshop.service.CommodityService;
+import com.github.mayoi7.easyshop.service.RedisService;
 import com.github.mayoi7.easyshop.service.UserService;
 import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.beans.factory.annotation.Autowired;

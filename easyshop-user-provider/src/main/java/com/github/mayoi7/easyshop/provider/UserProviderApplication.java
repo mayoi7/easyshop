@@ -13,7 +13,6 @@ import tk.mybatis.spring.annotation.MapperScan;
  */
 @SpringBootApplication
 @EnableDiscoveryClient
-@EnableCaching
 @MapperScan(basePackages = "com.github.mayoi7.easyshop.provider.mapper")
 public class UserProviderApplication {
 

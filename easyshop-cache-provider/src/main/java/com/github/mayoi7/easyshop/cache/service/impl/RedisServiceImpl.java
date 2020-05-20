@@ -1,9 +1,9 @@
-package com.github.mayoi7.easyshop.statistic.service.impl;
+package com.github.mayoi7.easyshop.cache.service.impl;
 
 import com.github.mayoi7.easyshop.service.RedisService;
+import org.apache.dubbo.config.annotation.Service;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.support.atomic.RedisAtomicDouble;
-import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.Objects;

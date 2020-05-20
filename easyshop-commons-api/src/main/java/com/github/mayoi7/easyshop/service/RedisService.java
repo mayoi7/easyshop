@@ -13,34 +13,64 @@ public interface RedisService {
     /**
      * 设置缓存
      *
-     * @param key   缓存的key
+     * @param key 缓存的key
      * @param value 缓存的value
      */
     void set(String key, Object value);
 
     /**
+     * 设置分组缓存
+     * @param cacheName 主题名
+     * @param key 缓存key
+     * @param value 缓存value
+     */
+    void set(String cacheName, String key, Object value);
+
+    /**
      * 设置缓存，以及其超时时间
      *
-     * @param key     缓存的key
-     * @param value   缓存的value
+     * @param key 缓存的key
+     * @param value 缓存的value
      * @param seconds 超时时间，单位为秒
      */
-    void set(String key, Object value, int seconds);
+    void setWithExpire(String key, Object value, int seconds);
+
+    /**
+     * 设置缓存，以及其超时时间
+     * @param cacheName 缓存组名
+     * @param key 缓存的key
+     * @param value 缓存的value
+     * @param seconds 超时时间，单位为秒
+     */
+    void setWithExpire(String cacheName, String key, Object value, int seconds);
 
     /**
      * 获取缓存
-     *
      * @param key 缓存的key
      * @return key对应的缓存，如果不存在则返回null
      */
     Object get(String key);
 
     /**
+     * 获取缓存
+     * @param cacheName 缓存组名
+     * @param key 缓存的key
+     * @return key对应的缓存，如果不存在则返回null
+     */
+    Object get(String cacheName, String key);
+
+    /**
      * 删除缓存
-     *
      * @param key 要删除的缓存的key
      */
     void del(String key);
+
+    /**
+     * 删除缓存
+     * @param cacheName 要删除的缓存组名
+     * @param key 要删除的缓存的key
+     */
+    void del(String cacheName, String key);
 
     /**
      * 统计计数值

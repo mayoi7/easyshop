@@ -1,6 +1,7 @@
 package com.github.mayoi7.easyshop.statistic.service.impl;
 
 import com.github.mayoi7.easyshop.po.Statistic;
+import com.github.mayoi7.easyshop.service.RedisService;
 import com.github.mayoi7.easyshop.service.StatisticService;
 import com.github.mayoi7.easyshop.statistic.mapper.StatisticMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,9 @@ public class StatisticServiceImpl implements StatisticService {
 
     @Resource
     private StatisticMapper statisticMapper;
+
+    @Resource
+    private RedisService redisService;
 
     @Override
     public int saveTransactionData(BigDecimal amount) {

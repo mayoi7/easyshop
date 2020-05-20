@@ -1,9 +1,12 @@
 package com.github.mayoi7.easyshop.server.service.impl;
 
 import com.github.mayoi7.easyshop.constant.PageConstant;
+import com.github.mayoi7.easyshop.constant.RedisKeys;
 import com.github.mayoi7.easyshop.po.Commodity;
 import com.github.mayoi7.easyshop.server.mapper.CommodityMapper;
 import com.github.mayoi7.easyshop.service.CommodityService;
+import com.github.mayoi7.easyshop.service.RedisService;
+import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -22,14 +25,20 @@ public class CommodityServiceImpl implements CommodityService {
     @Autowired
     private CommodityMapper commodityMapper;
 
+    @Reference
+    private RedisService redisService;
+
     @Override
-    @Cacheable(cacheNames = "easyshop#commodity@id", key = "#commodityId")
     public Commodity findById(Long commodityId) {
         if (commodityId == null ){
             return null;
-        } else {
-            return commodityMapper.selectByPrimaryKey(commodityId);
         }
+        Commodity commodity = (Commodity) redisService.get(RedisKeys.COMMODITY_ID, commodityId.toString());
+        if (commodity == null) {
+            commodity = commodityMapper.selectByPrimaryKey(commodityId);
+            redisService.set(RedisKeys.COMMODITY_ID, commodityId.toString(), commodity);
+        }
+        return commodity;
     }
 
     @Override
