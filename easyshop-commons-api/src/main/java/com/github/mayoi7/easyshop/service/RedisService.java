@@ -1,6 +1,7 @@
 package com.github.mayoi7.easyshop.service;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * 缓存接口
@@ -25,6 +26,72 @@ public interface RedisService {
      * @param value 缓存value
      */
     void set(String cacheName, String key, Object value);
+
+    /**
+     * 设置缓存队列
+     * @param key 缓存的key
+     * @param value 缓存的value
+     * @return 当使用事务或流水线时返回null
+     */
+    Long setInList(String key, Object value);
+
+    /**
+     * 设置带有过期时间的缓存队列
+     * @param key 缓存的key
+     * @param value 缓存的value
+     * @param expire 过期时间（单位：秒）
+     * @return 当使用事务或流水线时返回null
+     */
+    Long setInListWithExpire(String key, Object value, int expire);
+
+    /**
+     * 设置分组的缓存队列
+     * @param cacheName 缓存分组名
+     * @param key 缓存的key
+     * @param value 缓存的value
+     * @return 当使用事务或流水线时返回null
+     */
+    Long setInList(String cacheName, String key, Object value);
+
+    /**
+     * 设置带有过期时间的分组缓存队列
+     * @param cacheName 缓存分组名
+     * @param key 缓存的key
+     * @param value 缓存的value
+     * @param expire 过期时间（单位：秒）
+     * @return 当使用事务或流水线时返回null
+     */
+    Long setInListWithExpire(String cacheName, String key, Object value, int expire);
+
+    /**
+     * 从缓存队列中获取
+     * @param key 缓存的key
+     * @return 返回缓存的value值
+     */
+    Object getInList(String key);
+
+    /**
+     * 从对应组的缓存队列中获取
+     * @param cacheName 缓存名称
+     * @param key 缓存的key
+     * @return 返回缓存的value值
+     */
+    Object getInList(String cacheName, String key);
+
+    /**
+     * 获取队列中最近插入的前20个元素
+     * @param key 缓存的key
+     * @return 返回全部集合，如果不存在则返回null
+     */
+    List<Object> getAllInList(String key);
+
+    /**
+     * 获取缓存组队列中获取最近插入的20个元素
+     * @param cacheName 缓存组名
+     * @param key 缓存的key
+     * @return 返回全部集合，如果不存在则返回null
+     */
+    List<Object> getAllInList(String cacheName, String key);
 
     /**
      * 设置缓存，以及其超时时间
