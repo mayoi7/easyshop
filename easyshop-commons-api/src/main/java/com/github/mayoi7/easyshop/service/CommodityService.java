@@ -29,7 +29,7 @@ public interface CommodityService {
     /**
      * 添加新商品，禁止更新，在执行时会将id属性置空
      * @param commodity 商品
-     * @return
+     * @return 返回是否添加成功的响应
      */
-//    int saveCommodity(Commodity commodity);
+    int saveCommodity(Commodity commodity);
 }

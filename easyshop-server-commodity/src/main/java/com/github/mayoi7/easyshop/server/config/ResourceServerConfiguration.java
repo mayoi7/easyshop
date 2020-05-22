@@ -1,4 +1,4 @@
-package com.github.mayoi7.easyshop.server.comfig;
+package com.github.mayoi7.easyshop.server.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;

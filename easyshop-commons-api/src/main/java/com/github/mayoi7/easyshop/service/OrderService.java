@@ -13,13 +13,14 @@ import java.util.List;
 public interface OrderService {
 
     /**
-     * 下订单
-     * @param commodityId 商品id
+     * 下订单。如果订单当前价格和下单时间正确（在缓存中可以查看到对应数据），则添加，否则返回空
      * @param userId 下单用户id
+     * @param commodityId 商品id
+     * @param price 下单时的当前价格
      * @param quantity 下单数量
-     * @return 返回插入的订单对象
+     * @return 返回插入的订单对象，如果插入失败或数据错误，则返回null
      */
-    Order placeOrder(Long commodityId, Long userId, Integer quantity);
+    Order placeOrder(Long userId, Long commodityId, Double price, Integer quantity);
 
     /**
      * 根据下单商品和用户id查询对应所有订单

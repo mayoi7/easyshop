@@ -34,6 +34,12 @@ public class ResponseResult<T> {
         this.data = data;
     }
 
+    public ResponseResult(String msg, T data) {
+        this.code = StateCode.OK.getCode();
+        this.msg = msg;
+        this.data = data;
+    }
+
     public ResponseResult(StateCode stateCode, T data) {
         this.code = stateCode.getCode();
         this.msg = stateCode.getMsg();
@@ -60,7 +66,11 @@ public class ResponseResult<T> {
         /** 其他客户端登陆 */
         OTHER_CLIENT_LOGGED(50012, "Other client logged in"),
         /** token过期 */
-        TOKEN_EXPIRE(50014, "Token expire");
+        TOKEN_EXPIRE(50014, "Token expire"),
+        /** 登陆异常 */
+        LOGIN_ABNORMAL(50015, "Login abnormal"),
+        /** 文件保存失败 */
+        FILE_SAVED_FAIL(50020, "File saved fail");
 
         private int code;
         private String msg;

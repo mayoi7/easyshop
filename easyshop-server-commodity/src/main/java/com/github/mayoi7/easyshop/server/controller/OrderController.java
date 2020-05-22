@@ -1,7 +1,12 @@
 package com.github.mayoi7.easyshop.server.controller;
 
 import com.github.mayoi7.easyshop.dto.ResponseResult;
+import com.github.mayoi7.easyshop.dto.order.OrderParam;
+import com.github.mayoi7.easyshop.service.OrderService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
 
 /**
  * @author LiuHaonan
@@ -12,13 +17,16 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/shop/order")
 public class OrderController {
 
+    @Resource
+    private OrderService orderService;
+
     @GetMapping("/test")
     public ResponseResult<Void> health() {
         return ResponseResult.SUCCESS;
     }
 
     @PostMapping("/")
-    public ResponseResult<Integer> placeOrder() {
+    public ResponseResult<Integer> placeOrder(@RequestBody OrderParam orderParam) {
         return null;
     }
 }

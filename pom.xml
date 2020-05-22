@@ -18,6 +18,7 @@
         <module>easyshop-gateway</module>
         <module>easyshop-data-statistic</module>
         <module>easyshop-cache-provider</module>
+        <module>easyshop-server-image</module>
     </modules>
     <properties>
         <!-- Environment Settings -->
