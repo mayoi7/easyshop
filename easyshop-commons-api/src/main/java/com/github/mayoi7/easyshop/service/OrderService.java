@@ -2,6 +2,7 @@ package com.github.mayoi7.easyshop.service;
 
 import com.github.mayoi7.easyshop.po.Order;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -11,6 +12,15 @@ import java.util.List;
  * @email acerola.orion@foxmail.com
  */
 public interface OrderService {
+
+    /**
+     * 从缓存队列中检查商品价格是否合法
+     * @param commodityId 商品id
+     * @param price 商品价格
+     * @param currentTimestamp 下单时间戳（该属性不可由用户传递）
+     * @return true：合法
+     */
+    boolean checkPrice(Long commodityId, BigDecimal price, long currentTimestamp);
 
     /**
      * 下订单。如果订单当前价格和下单时间正确（在缓存中可以查看到对应数据），则添加，否则返回空
