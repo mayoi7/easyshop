@@ -3,6 +3,8 @@ package com.github.mayoi7.easyshop.po;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+
+import com.github.mayoi7.easyshop.dto.commodity.CommodityParam;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -51,13 +53,13 @@ public class Commodity implements Serializable {
     private String image;
 
     /**
-    * 原价
+    * 原价，仅做打折促销时的参考使用
     */
     @Column(name = "original_price" )
     private BigDecimal originalPrice;
 
     /**
-    * 现价
+    * 现价，如果与原价相同，则表示不参加折扣，原价属性会被自动忽略
     */
     @Column(name = "current_price" )
     private BigDecimal currentPrice;
@@ -73,4 +75,13 @@ public class Commodity implements Serializable {
 
     @Column(name = "update_time" )
     private Date updateTime;
+
+    public Commodity(CommodityParam param, String imagePath) {
+        this.id = param.getId();
+        this.name = param.getName();
+        this.description = param.getDescription();
+        this.image = imagePath;
+        this.originalPrice = BigDecimal.valueOf(param.getPrice());
+        this.currentPrice = this.originalPrice;
+    }
 }

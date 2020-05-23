@@ -6,6 +6,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.support.atomic.RedisAtomicDouble;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -16,6 +17,8 @@ import java.util.concurrent.TimeUnit;
  */
 @Service
 public class RedisServiceImpl implements RedisService {
+
+    private static final int LIST_MAX_AMOUNT = 20;
 
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
@@ -33,6 +36,47 @@ public class RedisServiceImpl implements RedisService {
     @Override
     public void set(String cacheName, String key, Object value) {
         set(spliceKey(cacheName, key), value);
+    }
+
+    @Override
+    public Long setInList(String key, Object value) {
+        return redisTemplate.opsForList().leftPush(key, value);
+    }
+
+    @Override
+    public Long setInListWithExpire(String key, Object value, int expire) {
+        redisTemplate.expire(key, expire, TimeUnit.SECONDS);
+        return redisTemplate.opsForList().leftPush(key, value);
+    }
+
+    @Override
+    public Long setInList(String cacheName, String key, Object value) {
+        return setInList(spliceKey(cacheName, key), value);
+    }
+
+    @Override
+    public Long setInListWithExpire(String cacheName, String key, Object value, int expire) {
+        return setInListWithExpire(spliceKey(cacheName, key), value, expire);
+    }
+
+    @Override
+    public Object getInList(String key) {
+        return redisTemplate.opsForList().leftPop(key);
+    }
+
+    @Override
+    public Object getInList(String cacheName, String key) {
+        return getInList(spliceKey(cacheName, key));
+    }
+
+    @Override
+    public List<Object> getAllInList(String key) {
+        return redisTemplate.opsForList().range(key, 0, LIST_MAX_AMOUNT - 1);
+    }
+
+    @Override
+    public List<Object> getAllInList(String cacheName, String key) {
+        return getAllInList(spliceKey(cacheName, key));
     }
 
     @Override

@@ -40,6 +40,11 @@
             <artifactId>easyshop-commons-api</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.mayoi7</groupId>
+            <artifactId>easyshop-commons-utils</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
         <!-- security -->
         <dependency>

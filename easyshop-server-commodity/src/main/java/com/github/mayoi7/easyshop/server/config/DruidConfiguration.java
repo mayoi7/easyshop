@@ -1,4 +1,4 @@
-package com.github.mayoi7.easyshop.server.comfig;
+package com.github.mayoi7.easyshop.server.config;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.support.http.StatViewServlet;
