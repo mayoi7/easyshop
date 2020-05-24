@@ -6,6 +6,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.support.atomic.RedisAtomicDouble;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -71,13 +72,18 @@ public class RedisServiceImpl implements RedisService {
 
     @Override
     public List<Object> getAllInList(String key) {
-        return redisTemplate.opsForList().range(key, 0, LIST_MAX_AMOUNT - 1);
+        Long size = redisTemplate.opsForList().size(key);
+        if (size == null) {
+            return new ArrayList<>();
+        }
+        return redisTemplate.opsForList().range(key, 0, size);
     }
 
     @Override
     public List<Object> getAllInList(String cacheName, String key) {
         return getAllInList(spliceKey(cacheName, key));
     }
+
 
     @Override
     public void setWithExpire(String key, Object value, int seconds) {

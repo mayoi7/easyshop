@@ -6,6 +6,7 @@ import com.github.mayoi7.easyshop.dto.TransData;
 import com.github.mayoi7.easyshop.service.RedisService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.stream.annotation.StreamListener;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -24,18 +25,10 @@ public class DataStatisticReceiver {
 
     /**
      * 接收交易数据消息
-     * @param transDataJson 消息json
+     * @param transData 消息数据
      */
     @StreamListener("trans-data-topic")
-    public void receiveTransData(String transDataJson) {
-        if (transDataJson == null) {
-            log.error("[MESSAGE] msg is null");
-        }
-        TransData transData = JSON.parseObject(transDataJson, TransData.class);
-        if (transData == null) {
-            log.error("[MESSAGE] msg convert fail <msg_json={}>", transDataJson);
-            return;
-        }
+    public void receiveTransData(@Payload TransData transData) {
         redisService.addAndGet(RedisKeys.TRANSACTION_DATA, transData.getAmount().doubleValue());
     }
 }

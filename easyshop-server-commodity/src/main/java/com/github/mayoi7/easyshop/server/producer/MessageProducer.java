@@ -1,8 +1,8 @@
 package com.github.mayoi7.easyshop.server.producer;
 
 import com.github.mayoi7.easyshop.dto.TransData;
+import com.github.mayoi7.easyshop.dto.order.OrderData;
 import com.github.mayoi7.easyshop.server.message.MessageSource;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 
@@ -26,5 +26,14 @@ public class MessageProducer {
      */
     public boolean sendTransData(TransData transData) {
         return source.transData().send(MessageBuilder.withPayload(transData).build());
+    }
+
+    /**
+     * 发送下订单请求
+     * @param orderData 订单数据
+     * @return 返回发送消息是否成功
+     */
+    public boolean sendOrderRequest(OrderData orderData) {
+        return source.orderRequest().send(MessageBuilder.withPayload(orderData).build());
     }
 }

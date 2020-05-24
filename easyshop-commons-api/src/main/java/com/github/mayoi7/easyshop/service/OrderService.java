@@ -1,8 +1,10 @@
 package com.github.mayoi7.easyshop.service;
 
+import com.github.mayoi7.easyshop.dto.order.OrderData;
 import com.github.mayoi7.easyshop.po.Order;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -24,19 +26,17 @@ public interface OrderService {
 
     /**
      * 下订单。如果订单当前价格和下单时间正确（在缓存中可以查看到对应数据），则添加，否则返回空
-     * @param userId 下单用户id
-     * @param commodityId 商品id
-     * @param price 下单时的当前价格
-     * @param quantity 下单数量
-     * @return 返回插入的订单对象，如果插入失败或数据错误，则返回null
+     * @param orderData 包含订单基本数据
+     * @return 返回库存
      */
-    Order placeOrder(Long userId, Long commodityId, Double price, Integer quantity);
+    Integer placeOrder(OrderData orderData);
 
     /**
      * 根据下单商品和用户id查询对应所有订单
-     * @param commodityId 商品id
      * @param userId 用户id
+     * @param timePoint 时间点
+     * @param isAfter 表示查询时间点以后的还是以前的数据。true：查询时间点之后的订单
      * @return 返回订单列表，如果不存在则返回空链表（非null对象）
      */
-    List<Order> findListByUserAndCommodity(Long commodityId, Long userId);
+    List<Order> findListByUserAndTime(Long userId, Date timePoint, boolean isAfter);
 }
