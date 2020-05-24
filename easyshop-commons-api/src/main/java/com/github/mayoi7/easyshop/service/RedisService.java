@@ -79,14 +79,14 @@ public interface RedisService {
     Object getInList(String cacheName, String key);
 
     /**
-     * 获取队列中最近插入的前20个元素
+     * 获取队列中最近插入的全部元素
      * @param key 缓存的key
      * @return 返回全部集合，如果不存在则返回null
      */
     List<Object> getAllInList(String key);
 
     /**
-     * 获取缓存组队列中获取最近插入的20个元素
+     * 获取缓存组队列中的全部元素
      * @param cacheName 缓存组名
      * @param key 缓存的key
      * @return 返回全部集合，如果不存在则返回null

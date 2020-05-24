@@ -13,4 +13,7 @@
     id, commodity_id, quantity
   </sql>
 
+  <select id="selectByCommodity" resultMap="BaseResultMap">
+    select * from inventory where commodity_id = #{commodityId} limit 1;
+  </select>
 </mapper>

@@ -75,10 +75,10 @@ public class CommodityController {
             }
             log.info("[FILE] image save success <path={}>", filePath + fileName);
         }
-        return new ResponseResult<>("success", null);
-//        Commodity commodity = new Commodity(commodityParam, fileName);
-//        commodityService.saveCommodity(commodity);
-//        return new ResponseResult<>("添加成功", commodity);
+//        return new ResponseResult<>("success", null);
+        Commodity commodity = new Commodity(commodityParam, fileName);
+        commodityService.saveCommodity(commodity);
+        return new ResponseResult<>("添加成功", commodity);
     }
 
     @GetMapping("/img")

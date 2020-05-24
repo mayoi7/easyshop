@@ -5,6 +5,14 @@ spring:
     multipart:
       max-file-size: 10MB
       max-request-size: 10MB
+  cloud:
+    stream:
+      rocketmq:
+        bindings:
+          order-topic: {consumer.orderly: true}
+      bindings:
+        order-send-topic: {destination: order-topic, content-type: application/json, group: easyshop-commodity, consumer.maxAttempts: 1}
+        order-topic: {destination: order-topic, content-type: application/json, group: easyshop-commodity, consumer.maxAttempts: 1}
 
 image:
   upload:

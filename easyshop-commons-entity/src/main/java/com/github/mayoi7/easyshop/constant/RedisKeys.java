@@ -25,6 +25,8 @@ public class RedisKeys {
     /** 通过用户id查询订单列表 */
     public static final String ORDER_USER = "easyshop#order@user";
 
+    public static final String INVENTORY_COMMODITY = "easyshop#inventory@commodity";
+
     /** 价格变更列表 */
     public static final String PRICE_LIST = "easyshop#price";
 

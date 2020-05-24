@@ -11,6 +11,7 @@ import com.github.mayoi7.easyshop.service.UserService;
 import com.github.mayoi7.easyshop.utils.HttpClientUtils;
 import com.github.mayoi7.easyshop.utils.ValidateUtils;
 import com.google.common.collect.Maps;
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.Response;
 import org.apache.dubbo.config.annotation.Reference;
 import org.apache.logging.log4j.util.Strings;
@@ -38,6 +39,7 @@ import java.util.Objects;
  */
 @RestController
 @RequestMapping("/user/")
+@Slf4j
 public class LoginController {
 
     private static final String OAUTH_TOKEN_URL = "http://localhost:9000/oauth/token";
@@ -67,8 +69,7 @@ public class LoginController {
 
     @PostMapping(value = "/login")
     public ResponseResult<Map<String, Object>> visitorLogin(@RequestBody @Validated LoginParam loginParam,
-                                                            BindingResult bindingResult)
-            throws IOException {
+                                                            BindingResult bindingResult) throws IOException {
         // 先校验参数，只返回第一个错误消息
         String errMsg = ValidateUtils.validateFirst(bindingResult);
         if (errMsg != null) {
@@ -83,13 +84,14 @@ public class LoginController {
         JSONObject jsonObject = JSON.parseObject(json);
 
         if (Strings.isEmpty(json) || jsonObject.get(tokenName) == null) {
+            log.error("null <name={}, json={}>", loginParam.getUsername(), jsonObject.toJSONString());
             // 该接口为游客接口，所有账号密码均可使用，如果不存在对应账号则会进行创建，但是禁止重名
-            String encryptedPassword = passwordEncoder.encode(loginParam.getPassword());
-            User user = new User(loginParam.getUsername(), encryptedPassword);
-            userService.insertUser(user);
-            response = requestAuthToken(user.getName(), user.getPassword());
-            json = Objects.requireNonNull(response.body()).string();
-            jsonObject = JSON.parseObject(json);
+//            String encryptedPassword = passwordEncoder.encode(loginParam.getPassword());
+//            User user = new User(loginParam.getUsername(), encryptedPassword);
+//            userService.insertUser(user);
+//            response = requestAuthToken(user.getName(), user.getPassword());
+//            json = Objects.requireNonNull(response.body()).string();
+//            jsonObject = JSON.parseObject(json);
         }
 
         String token = jsonObject.get(tokenName).toString();

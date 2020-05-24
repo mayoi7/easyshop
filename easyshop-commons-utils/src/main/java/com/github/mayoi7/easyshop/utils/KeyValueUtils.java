@@ -32,7 +32,17 @@ public class KeyValueUtils {
      */
     public static String splicePriceValue(BigDecimal price) {
         long currentTime = System.currentTimeMillis();
-        return price + DEFAULT_DELIMITER + currentTime;
+        return splicePriceValue(price, currentTime);
+    }
+
+    /**
+     * 生成用于价格队列的值，时间属性使用预设时间
+     * @param price 价格
+     * @param timestamp 价格更新时的时间戳
+     * @return 返回拼接后的值
+     */
+    public static String splicePriceValue(BigDecimal price, long timestamp) {
+        return price + DEFAULT_DELIMITER + timestamp;
     }
 
     /**

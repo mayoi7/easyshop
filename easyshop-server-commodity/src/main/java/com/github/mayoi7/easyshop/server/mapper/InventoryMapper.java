@@ -11,4 +11,11 @@ import tk.mybatis.mapper.MyMapper;
  * @email acerola.orion@foxmail.com
  */
 public interface InventoryMapper extends MyMapper<Inventory> {
+
+    /**
+     * 查询商品库存
+     * @param commodityId 商品id
+     * @return 返回库存对象
+     */
+    Inventory selectByCommodity(Long commodityId);
 }
