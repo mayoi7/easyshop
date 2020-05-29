@@ -6,6 +6,7 @@ import org.springframework.data.redis.support.atomic.RedisAtomicDouble;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -33,6 +34,54 @@ public class RedisServiceImpl implements RedisService {
     @Override
     public void set(String cacheName, String key, Object value) {
         set(spliceKey(cacheName, key), value);
+    }
+
+    @Override
+    @Deprecated
+    public Long setInList(String key, Object value) {
+        return null;
+    }
+
+    @Override
+    @Deprecated
+    public Long setInListWithExpire(String key, Object value, int expire) {
+        return null;
+    }
+
+    @Override
+    @Deprecated
+    public Long setInList(String cacheName, String key, Object value) {
+        return null;
+    }
+
+    @Override
+    @Deprecated
+    public Long setInListWithExpire(String cacheName, String key, Object value, int expire) {
+        return null;
+    }
+
+    @Override
+    @Deprecated
+    public Object getInList(String key) {
+        return null;
+    }
+
+    @Override
+    @Deprecated
+    public Object getInList(String cacheName, String key) {
+        return null;
+    }
+
+    @Override
+    @Deprecated
+    public List<Object> getAllInList(String key) {
+        return null;
+    }
+
+    @Override
+    @Deprecated
+    public List<Object> getAllInList(String cacheName, String key) {
+        return null;
     }
 
     @Override

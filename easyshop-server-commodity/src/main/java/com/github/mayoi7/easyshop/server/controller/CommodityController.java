@@ -7,24 +7,22 @@ import com.github.mayoi7.easyshop.dto.commodity.CommodityParam;
 import com.github.mayoi7.easyshop.po.Commodity;
 import com.github.mayoi7.easyshop.po.User;
 import com.github.mayoi7.easyshop.service.CommodityService;
-import com.github.mayoi7.easyshop.service.RedisService;
 import com.github.mayoi7.easyshop.service.UserService;
 import com.github.mayoi7.easyshop.utils.FileUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.Reference;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author LiuHaonan
@@ -50,6 +48,18 @@ public class CommodityController {
         Commodity commodity = commodityService.findById(id);
 
         return new ResponseResult<>(JSON.toJSONString(commodity));
+    }
+
+    @GetMapping("/list/{page}")
+    public ResponseResult<List<Commodity>> listCommodities(
+            @PathVariable(value = "page", required = false) int page) {
+        List<Commodity> commodities = commodityService.findListByIdDescInPage(page);
+        if (commodities == null || commodities.isEmpty()) {
+            log.warn("[COMMODITY] commodity list is null <page={}>", page);
+            return new ResponseResult<>("查询成功", new ArrayList<>());
+        } else {
+            return new ResponseResult<>("查询成功", commodities);
+        }
     }
 
     @PostMapping("/")
