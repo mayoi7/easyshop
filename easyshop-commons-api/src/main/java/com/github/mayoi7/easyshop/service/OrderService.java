@@ -27,9 +27,9 @@ public interface OrderService {
     /**
      * 下订单。如果订单当前价格和下单时间正确（在缓存中可以查看到对应数据），则添加，否则返回空
      * @param orderData 包含订单基本数据
-     * @return 返回库存
+     * @return 返回是否成功
      */
-    Integer placeOrder(OrderData orderData);
+    boolean placeOrder(OrderData orderData);
 
     /**
      * 根据下单商品和用户id查询对应所有订单

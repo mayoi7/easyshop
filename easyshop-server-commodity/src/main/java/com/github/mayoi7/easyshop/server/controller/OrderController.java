@@ -47,10 +47,20 @@ public class OrderController {
             return new ResponseResult<>(StateCode.LOGIN_ABNORMAL, null);
         }
         OrderData orderData = new OrderData(orderParam, user.getId());
-        Integer quantity = orderService.placeOrder(orderData);
-        if (quantity == null) {
+        boolean orderResult = orderService.placeOrder(orderData);
+        if (!orderResult) {
             return new ResponseResult<>(StateCode.FAIL, "下单失败", null);
         }
-        return null;
+        return ResponseResult.SUCCESS;
+    }
+
+    /**
+     * 将商品添加到购物车
+     * @param commodityId 要添加到购物车的商品id
+     * @return 返回添加是否成功的响应
+     */
+    @PostMapping("/cart/{commodityId}")
+    public ResponseResult<Void> appendCart(@PathVariable("commodityId") Long commodityId) {
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
     }
 }
