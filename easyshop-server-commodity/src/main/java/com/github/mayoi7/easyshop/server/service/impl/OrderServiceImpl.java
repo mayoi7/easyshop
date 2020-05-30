@@ -9,6 +9,7 @@ import com.github.mayoi7.easyshop.server.mapper.CommodityMapper;
 import com.github.mayoi7.easyshop.server.mapper.InventoryMapper;
 import com.github.mayoi7.easyshop.server.mapper.OrderMapper;
 import com.github.mayoi7.easyshop.server.producer.MessageProducer;
+import com.github.mayoi7.easyshop.service.InventoryService;
 import com.github.mayoi7.easyshop.service.OrderService;
 import com.github.mayoi7.easyshop.service.RedisService;
 import com.github.mayoi7.easyshop.utils.KeyValueUtils;
@@ -39,10 +40,10 @@ public class OrderServiceImpl implements OrderService {
     private CommodityMapper commodityMapper;
 
     @Resource
-    private MessageProducer producer;
+    private InventoryService inventoryService;
 
     @Resource
-    private InventoryMapper inventoryMapper;
+    private MessageProducer producer;
 
     @Reference
     private RedisService redisService;
@@ -84,39 +85,24 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Integer placeOrder(OrderData orderData) {
-        Long commodityId = orderData.getCommodityId();
-        // 查询库存是否有剩余
-        Inventory inventory = (Inventory) redisService.get(RedisKeys.INVENTORY_COMMODITY, commodityId.toString());
-        if (inventory == null) {
-            inventory = inventoryMapper.selectByCommodity(commodityId);
-        }
-        if (inventory == null || inventory.getQuantity() <= 0) {
-            log.warn("[ORDER] inventory is zero <commodity={}>", commodityId);
-            return null;
-        }
-
+    public boolean placeOrder(OrderData orderData) {
+        /*
         // 检查价格是否合法
         boolean isPass = checkPrice(commodityId, orderData.getPrice(), System.currentTimeMillis());
         if (!isPass) {
             log.error("[PRICE] order price illegal");
             return null;
         }
-
-        // 减库存
-        inventory.setQuantity(inventory.getQuantity() - 1);
-        int res = inventoryMapper.updateByPrimaryKeySelective(inventory);
-
-        // 通过消息队列异步下单
-        if (res > 0) {
-            log.info("[MESSAGE] sending msg to place order <user_id={}, commodity_id={}, price={}, amount={}>",
-                    orderData.getUserId(), commodityId, orderData.getPrice(), orderData.getQuantity());
-            producer.sendOrderRequest(orderData);
-            return inventory.getQuantity();
-        } else {
-            log.error("[INVENTORY] update inventory fail <commodity={}>", commodityId);
-            return null;
+        */
+        Integer remain = inventoryService.reduceInventory(orderData.getCommodityId(), orderData.getQuantity());
+        if (remain == null) {
+            // 返回空说明库存不足（并不一定是0，只是下单数量超过当前库存）
+            return false;
         }
+        log.info("[MESSAGE] sending msg to place order <user_id={}, commodity_id={}, price={}, amount={}>",
+                orderData.getUserId(), orderData.getCommodityId(), orderData.getPrice(), orderData.getQuantity());
+        producer.sendOrderRequest(orderData);
+        return true;
     }
 
     @Override
