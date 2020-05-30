@@ -2,10 +2,12 @@ package com.github.mayoi7.easyshop.server.controller;
 
 import com.github.mayoi7.easyshop.dto.ResponseResult;
 import com.github.mayoi7.easyshop.dto.ResponseResult.StateCode;
+import com.github.mayoi7.easyshop.dto.cart.CartCommodity;
 import com.github.mayoi7.easyshop.dto.order.OrderData;
 import com.github.mayoi7.easyshop.dto.order.OrderParam;
 import com.github.mayoi7.easyshop.po.Order;
 import com.github.mayoi7.easyshop.po.User;
+import com.github.mayoi7.easyshop.service.CartService;
 import com.github.mayoi7.easyshop.service.OrderService;
 import com.github.mayoi7.easyshop.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author LiuHaonan
@@ -29,6 +32,9 @@ public class OrderController {
 
     @Resource
     private OrderService orderService;
+
+    @Resource
+    private CartService cartService;
 
     @Reference
     private UserService userService;
@@ -62,5 +68,22 @@ public class OrderController {
     @PostMapping("/cart/{commodityId}")
     public ResponseResult<Void> appendCart(@PathVariable("commodityId") Long commodityId) {
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        boolean result = cartService.addCart(name, commodityId);
+        if (result) {
+            return ResponseResult.SUCCESS;
+        } else {
+            return new ResponseResult<>(StateCode.FAIL, "添加购物车异常，请重试", null);
+        }
+    }
+
+    @GetMapping("/cart")
+    public ResponseResult<List<CartCommodity>> listCart() {
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        List<CartCommodity> cartList = cartService.loadCart(name);
+        if (cartList == null) {
+            log.warn("[CART] something wrong when load cart <user_name={}>", name);
+            return new ResponseResult<>(StateCode.FAIL, "加载购物车异常，请重试", null);
+        }
+        return new ResponseResult<>(StateCode.OK, cartList);
     }
 }

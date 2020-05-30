@@ -2,7 +2,9 @@ package com.github.mayoi7.easyshop.server.service.impl;
 
 import com.github.mayoi7.easyshop.constant.RedisKeys;
 import com.github.mayoi7.easyshop.dto.cart.CartCommodity;
+import com.github.mayoi7.easyshop.po.Commodity;
 import com.github.mayoi7.easyshop.service.CartService;
+import com.github.mayoi7.easyshop.service.CommodityService;
 import com.github.mayoi7.easyshop.service.InventoryService;
 import com.github.mayoi7.easyshop.service.RedisService;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,6 +29,9 @@ public class CartServiceImpl implements CartService {
     private RedisService redisService;
 
     @Resource
+    private CommodityService commodityService;
+
+    @Resource
     private InventoryService inventoryService;
 
     @Override
@@ -36,6 +42,17 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public List<CartCommodity> loadCart(String username) {
-        return null;
+        List<Object> rawCartList = redisService.getAllInList(RedisKeys.CART_LIST, username);
+        List<CartCommodity> cartList = new ArrayList<>(rawCartList.size());
+        if (rawCartList.isEmpty()) {
+            return cartList;
+        }
+        rawCartList.forEach(id -> {
+            Long commodityId = (Long) id;
+            Commodity commodity = commodityService.findById(commodityId);
+            Integer quantity = inventoryService.checkInventory(commodityId);
+            cartList.add(new CartCommodity(commodity, quantity));
+        });
+        return cartList;
     }
 }

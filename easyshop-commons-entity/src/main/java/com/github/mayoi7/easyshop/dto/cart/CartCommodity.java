@@ -1,5 +1,6 @@
 package com.github.mayoi7.easyshop.dto.cart;
 
+import com.github.mayoi7.easyshop.po.Commodity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -35,5 +36,15 @@ public class CartCommodity implements Serializable {
     private BigDecimal price;
 
     /** 商品库存 */
-    private Integer inventory;
+    private Integer quantity;
+
+    public CartCommodity(Commodity commodity, Integer quantity) {
+        this.commodityId = commodity.getId();
+        this.name = commodity.getName();
+        this.description = commodity.getDescription();
+        this.image = commodity.getImage();
+        this.price = commodity.getCurrentPrice();
+
+        this.quantity = quantity;
+    }
 }
