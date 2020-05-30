@@ -30,7 +30,7 @@ export default {
       })
     },
     placeOrder() {
-      this.$router.push("/order");
+      this.$router.push("/cart");
     }
   }
 }
