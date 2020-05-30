@@ -5,8 +5,8 @@
         ref="multipleTable"
         :data="orders"
         tooltip-effect="dark"
+        @selection-change="handleSelection"
         style="width: 100%">
-<!--        @selection-change="handleSelectionChange"-->
 
         <el-table-column
           type="selection"
@@ -51,16 +51,16 @@
         </el-table-column>
       </el-table>
       <div class="order-submit-bar">
-        <div style="float: right;width: 450px;">
+        <div style="float: right;">
           <div class="label" style="display: inline-block">
-            已选商品<span class="quantity">1</span>件
+            已选商品<span class="quantity">{{total_amount}}</span>件
           </div>
           <div class="label" style="margin-left: 80px">
             合计：
-            <span class="price" style="font-weight: 700;font-size: 22px;">￥26.0</span>
+            <span class="price" style="font-weight: 700;font-size: 22px;">￥{{total_price}}</span>
           </div>
           <div class="submit">
-            <a href="javascript:;" style="position: relative;top: 12px;font-size: 20px;">提交</a>
+            <a href="javascript:;" @click="submit" class="submit-link" :class="{'disabled': total_amount === 0}">提交</a>
           </div>
         </div>
         </div>
@@ -155,15 +155,33 @@ export default {
           quantity: 3,
           time: '2019-09-09 10:35:12'
         }
-      ]
+      ],
+      selection: []
     }
   },
   methods: {
-    clickIt() {
-      let refs = this.$refs.order;
-      for (let i = 0; i < refs.length; i++) {
-        console.log(refs[i].checked)
+    handleSelection(val) {
+      this.selection = val;
+      console.log(this.selection);
+    },
+    submit() {
+      console.log(this.selection);
+    }
+  },
+  computed: {
+    total_price() {
+      let price = 0;
+      for (let i = 0; i < this.selection.length; i++) {
+        price += this.selection[i].price * this.selection[i].quantity;
       }
+      return price;
+    },
+    total_amount() {
+      let amount = 0;
+      for (let i = 0; i < this.selection.length; i++) {
+        amount += this.selection[i].quantity;
+      }
+      return amount;
     }
   }
 }
@@ -206,6 +224,18 @@ export default {
     line-height: normal;
   }
 
+  .order-submit-bar .submit:hover {
+    background: #f22d00;
+  }
+
+  .order-submit-bar .submit .submit-link {
+    line-height: 50px;
+    font-size: 20px;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
   .order-submit-bar .label {
     display: inline-block;
     height: 50px;
@@ -237,5 +267,10 @@ export default {
 
   a.e-link:hover {
     color: #1482f0;
+  }
+
+  a.disabled {
+    background: #B0B0B0;
+    cursor:not-allowed;
   }
 </style>
