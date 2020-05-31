@@ -48,7 +48,7 @@ public class CartServiceImpl implements CartService {
             return cartList;
         }
         rawCartList.forEach(id -> {
-            Long commodityId = (Long) id;
+            Long commodityId = Long.parseLong(id.toString());
             Commodity commodity = commodityService.findById(commodityId);
             Integer quantity = inventoryService.checkInventory(commodityId);
             cartList.add(new CartCommodity(commodity, quantity));
