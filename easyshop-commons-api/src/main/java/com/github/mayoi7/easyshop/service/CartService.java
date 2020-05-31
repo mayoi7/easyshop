@@ -16,7 +16,7 @@ public interface CartService {
      * 将商品添加购物车
      * @param username 用户名
      * @param commodityId 商品id
-     * @return 返回是否添加成功
+     * @return 返回是否添加成功，如果返回false说明购物车中已存在对应商品
      */
     boolean addCart(String username, Long commodityId);
 

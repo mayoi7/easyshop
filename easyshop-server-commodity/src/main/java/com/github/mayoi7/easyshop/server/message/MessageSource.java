@@ -20,10 +20,4 @@ public interface MessageSource {
 
     @Output("order-send-topic")
     MessageChannel orderRequest();
-
-    @Input("inventory-topic")
-    SubscribableChannel handleInventoryUpdate();
-
-    @Output("inventory-send-topic")
-    MessageChannel inventoryRequest();
 }

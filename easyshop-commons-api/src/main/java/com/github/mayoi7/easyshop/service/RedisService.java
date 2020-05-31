@@ -2,6 +2,7 @@ package com.github.mayoi7.easyshop.service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 缓存接口
@@ -42,7 +43,7 @@ public interface RedisService {
      * @param expire 过期时间（单位：秒）
      * @return 当使用事务或流水线时返回null
      */
-    Long setInListWithExpire(String key, Object value, int expire);
+    Long setInListWithExpire(String key, Object value, long expire);
 
     /**
      * 设置分组的缓存队列
@@ -61,7 +62,7 @@ public interface RedisService {
      * @param expire 过期时间（单位：秒）
      * @return 当使用事务或流水线时返回null
      */
-    Long setInListWithExpire(String cacheName, String key, Object value, int expire);
+    Long setInListWithExpire(String cacheName, String key, Object value, long expire);
 
     /**
      * 从缓存队列中获取
@@ -100,7 +101,7 @@ public interface RedisService {
      * @param value 缓存的value
      * @param seconds 超时时间，单位为秒
      */
-    void setWithExpire(String key, Object value, int seconds);
+    void setWithExpire(String key, Object value, long seconds);
 
     /**
      * 设置缓存，以及其超时时间
@@ -109,7 +110,71 @@ public interface RedisService {
      * @param value 缓存的value
      * @param seconds 超时时间，单位为秒
      */
-    void setWithExpire(String cacheName, String key, Object value, int seconds);
+    void setWithExpire(String cacheName, String key, Object value, long seconds);
+
+    /**
+     * 设置缓存到集合
+     * @param key 键
+     * @param value 值
+     */
+    void setInSet(String key, Object value);
+
+    /**
+     * 设置缓存到集合
+     * @param cacheName 缓存组名
+     * @param key 键
+     * @param value 值
+     */
+    void setInSet(String cacheName, String key, Object value);
+
+    /**
+     * 设置缓存到集合，带有过期时间
+     * @param key 键
+     * @param value 值
+     * @param seconds 过期时间，单位秒
+     */
+    void setInSetWithExpire(String key, Object value, long seconds);
+
+    /**
+     * 设置缓存到集合，带有过期时间
+     * @param cacheName 缓存组名
+     * @param key 键
+     * @param value 值
+     * @param seconds 过期时间，单位秒
+     */
+    void setInSetWithExpire(String cacheName, String key, Object value, long seconds);
+
+    /**
+     * 检查某值是否在集合中存在
+     * @param key 键
+     * @param value 值
+     * @return 返回对应键值是否存在，true：存在
+     */
+    Boolean checkExistenceInSet(String key, Object value);
+
+    /**
+     * 检查某值是否在集合中存在
+     * @param cacheName 缓存组名
+     * @param key 键
+     * @param value 值
+     * @return 返回对应键值是否存在，true：存在
+     */
+    Boolean checkExistenceInSet(String cacheName, String key, Object value);
+
+    /**
+     * 获取缓存集合中所有元素
+     * @param key 键
+     * @return 返回元素集合
+     */
+    Set<Object> getAllInSet(String key);
+
+    /**
+     * 获取缓存集合中所有元素
+     * @param cacheName 缓存组名
+     * @param key 键
+     * @return 返回元素集合
+     */
+    Set<Object> getAllInSet(String cacheName, String key);
 
     /**
      * 获取缓存

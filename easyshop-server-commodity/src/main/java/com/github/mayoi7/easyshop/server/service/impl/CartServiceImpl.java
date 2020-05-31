@@ -14,7 +14,9 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author LiuHaonan
@@ -36,22 +38,26 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public boolean addCart(String username, Long commodityId) {
-        redisService.setInList(RedisKeys.CART_LIST, username, commodityId);
+        if (redisService.checkExistenceInSet(RedisKeys.CART_LIST, username, commodityId)) {
+            return false;
+        }
+        redisService.setInSet(RedisKeys.CART_LIST, username, commodityId);
         return true;
     }
 
     @Override
     public List<CartCommodity> loadCart(String username) {
-        List<Object> rawCartList = redisService.getAllInList(RedisKeys.CART_LIST, username);
-        List<CartCommodity> cartList = new ArrayList<>(rawCartList.size());
+        Set<Object> rawCartList = redisService.getAllInSet(RedisKeys.CART_LIST, username);
+        // 因为缓存中是正序数据，查询时需要逆序数据，所以采用链表进行首追加操作
+        LinkedList<CartCommodity> cartList = new LinkedList<>();
         if (rawCartList.isEmpty()) {
             return cartList;
         }
         rawCartList.forEach(id -> {
-            Long commodityId = (Long) id;
+            Long commodityId = Long.parseLong(id.toString());
             Commodity commodity = commodityService.findById(commodityId);
             Integer quantity = inventoryService.checkInventory(commodityId);
-            cartList.add(new CartCommodity(commodity, quantity));
+            cartList.addFirst(new CartCommodity(commodity, quantity));
         });
         return cartList;
     }
