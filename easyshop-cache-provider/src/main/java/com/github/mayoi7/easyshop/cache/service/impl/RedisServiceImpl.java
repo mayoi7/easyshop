@@ -9,6 +9,7 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -19,7 +20,7 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class RedisServiceImpl implements RedisService {
 
-    private static final int LIST_MAX_AMOUNT = 20;
+    private static final long LIST_MAX_AMOUNT = 20;
 
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
@@ -45,7 +46,7 @@ public class RedisServiceImpl implements RedisService {
     }
 
     @Override
-    public Long setInListWithExpire(String key, Object value, int expire) {
+    public Long setInListWithExpire(String key, Object value, long expire) {
         redisTemplate.expire(key, expire, TimeUnit.SECONDS);
         return redisTemplate.opsForList().leftPush(key, value);
     }
@@ -56,7 +57,7 @@ public class RedisServiceImpl implements RedisService {
     }
 
     @Override
-    public Long setInListWithExpire(String cacheName, String key, Object value, int expire) {
+    public Long setInListWithExpire(String cacheName, String key, Object value, long expire) {
         return setInListWithExpire(spliceKey(cacheName, key), value, expire);
     }
 
@@ -86,13 +87,54 @@ public class RedisServiceImpl implements RedisService {
 
 
     @Override
-    public void setWithExpire(String key, Object value, int seconds) {
+    public void setWithExpire(String key, Object value, long seconds) {
         redisTemplate.opsForValue().set(key, value, seconds, TimeUnit.SECONDS);
     }
 
     @Override
-    public void setWithExpire(String cacheName, String key, Object value, int seconds) {
+    public void setWithExpire(String cacheName, String key, Object value, long seconds) {
         setWithExpire(spliceKey(cacheName, key), value, seconds);
+    }
+
+    @Override
+    public void setInSet(String key, Object value) {
+        redisTemplate.opsForSet().add(key, value);
+    }
+
+    @Override
+    public void setInSet(String cacheName, String key, Object value) {
+        setInSet(spliceKey(cacheName, key), value);
+    }
+
+    @Override
+    public void setInSetWithExpire(String key, Object value, long seconds) {
+        redisTemplate.opsForSet().add(key, value);
+        redisTemplate.expire(key, seconds, TimeUnit.SECONDS);
+    }
+
+    @Override
+    public void setInSetWithExpire(String cacheName, String key, Object value, long seconds) {
+        setInSetWithExpire(spliceKey(cacheName, key), value, seconds);
+    }
+
+    @Override
+    public Boolean checkExistenceInSet(String key, Object value) {
+        return redisTemplate.opsForSet().isMember(key, value);
+    }
+
+    @Override
+    public Boolean checkExistenceInSet(String cacheName, String key, Object value) {
+        return checkExistenceInSet(spliceKey(cacheName, key), value);
+    }
+
+    @Override
+    public Set<Object> getAllInSet(String key) {
+        return redisTemplate.opsForSet().members(key);
+    }
+
+    @Override
+    public Set<Object> getAllInSet(String cacheName, String key) {
+        return getAllInSet(spliceKey(cacheName, key));
     }
 
     @Override

@@ -8,7 +8,7 @@ package com.github.mayoi7.easyshop.constant;
 public class RedisKeys {
 
     /** 缓存默认保存7天 */
-    public static final int DEFAULT_EXPIRE = 60 * 60 * 7;
+    public static final long DEFAULT_EXPIRE = 60 * 60 * 7;
 
     /** 订单额统计 */
     public static final String TRANSACTION_DATA = "statistic#trans_data";
