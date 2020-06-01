@@ -34,4 +34,7 @@ public class RedisKeys {
     /** 购物车缓存 */
     public static final String CART_LIST = "easyshop#cart";
 
+    /** 订单缓存锁 */
+    public static final String ORDER_LOCK = "easyshop#orderkey" ;
+
 }

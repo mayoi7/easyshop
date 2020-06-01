@@ -18,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
@@ -86,22 +87,38 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean placeOrder(OrderData orderData) {
-        /*
-        // 检查价格是否合法
-        boolean isPass = checkPrice(commodityId, orderData.getPrice(), System.currentTimeMillis());
-        if (!isPass) {
-            log.error("[PRICE] order price illegal");
-            return null;
+        String userIdString = orderData.getUserId().toString();
+
+        // 如果发现订单已提交，则直接返回
+        if (redisService.checkExistenceInSet(RedisKeys.ORDER_LOCK, userIdString, orderData.getKey())) {
+            return true;
+        } else {
+            redisService.setInSet(RedisKeys.ORDER_LOCK, userIdString, orderData.getKey());
         }
-        */
+
         Integer remain = inventoryService.reduceInventory(orderData.getCommodityId(), orderData.getQuantity());
         if (remain == null) {
             // 返回空说明库存不足（并不一定是0，只是下单数量超过当前库存）
             return false;
         }
         log.info("[MESSAGE] sending msg to place order <user_id={}, commodity_id={}, price={}, amount={}>",
-                orderData.getUserId(), orderData.getCommodityId(), orderData.getPrice(), orderData.getQuantity());
+                userIdString, orderData.getCommodityId(), orderData.getPrice(), orderData.getQuantity());
         producer.sendOrderRequest(orderData);
+        return true;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean placeOrders(List<OrderData> orderDataList) {
+        if (orderDataList == null || orderDataList.isEmpty()) {
+            return true;
+        }
+        for (OrderData orderData: orderDataList) {
+            // placeOrder不会触发事务
+            if (!placeOrder(orderData)) {
+                return false;
+            }
+        }
         return true;
     }
 

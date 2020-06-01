@@ -32,6 +32,13 @@ public interface OrderService {
     boolean placeOrder(OrderData orderData);
 
     /**
+     * 一次下多个订单
+     * @param orderDataList 订单列表
+     * @return 返回是否下单成功
+     */
+    boolean placeOrders(List<OrderData> orderDataList);
+
+    /**
      * 根据下单商品和用户id查询对应所有订单
      * @param userId 用户id
      * @param timePoint 时间点

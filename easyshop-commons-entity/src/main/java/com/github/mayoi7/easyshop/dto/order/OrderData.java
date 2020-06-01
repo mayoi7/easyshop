@@ -20,6 +20,9 @@ public class OrderData implements Serializable {
 
     private static final long serialVersionUID = 367545290265696259L;
 
+    /** 随机唯一key，避免重复下单 */
+    private String key;
+
     /** 下单人用户id */
     private Long userId;
 
