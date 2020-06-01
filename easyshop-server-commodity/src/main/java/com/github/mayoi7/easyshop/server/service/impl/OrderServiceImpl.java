@@ -86,21 +86,22 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean placeOrder(OrderData orderData) {
-        /*
-        // 检查价格是否合法
-        boolean isPass = checkPrice(commodityId, orderData.getPrice(), System.currentTimeMillis());
-        if (!isPass) {
-            log.error("[PRICE] order price illegal");
-            return null;
+        String userIdString = orderData.getUserId().toString();
+
+        // 如果发现订单已提交，则直接返回
+        if (redisService.checkExistenceInSet(RedisKeys.ORDER_LOCK, userIdString, orderData.getKey())) {
+            return true;
+        } else {
+            redisService.setInSet(RedisKeys.ORDER_LOCK, userIdString, orderData.getKey());
         }
-        */
+
         Integer remain = inventoryService.reduceInventory(orderData.getCommodityId(), orderData.getQuantity());
         if (remain == null) {
             // 返回空说明库存不足（并不一定是0，只是下单数量超过当前库存）
             return false;
         }
         log.info("[MESSAGE] sending msg to place order <user_id={}, commodity_id={}, price={}, amount={}>",
-                orderData.getUserId(), orderData.getCommodityId(), orderData.getPrice(), orderData.getQuantity());
+                userIdString, orderData.getCommodityId(), orderData.getPrice(), orderData.getQuantity());
         producer.sendOrderRequest(orderData);
         return true;
     }

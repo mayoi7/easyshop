@@ -1,6 +1,8 @@
 package com.github.mayoi7.easyshop.dto.order;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
@@ -10,7 +12,12 @@ import java.math.BigDecimal;
  * @email acerola.orion@foxmail.com
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class OrderParam {
+
+    /** 随机唯一key，用于避免重复下单 */
+    private String key;
 
     /** 下单商品id */
     private Long commodityId;
