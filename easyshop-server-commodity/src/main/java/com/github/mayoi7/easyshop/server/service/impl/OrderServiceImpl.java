@@ -18,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
@@ -103,6 +104,21 @@ public class OrderServiceImpl implements OrderService {
         log.info("[MESSAGE] sending msg to place order <user_id={}, commodity_id={}, price={}, amount={}>",
                 userIdString, orderData.getCommodityId(), orderData.getPrice(), orderData.getQuantity());
         producer.sendOrderRequest(orderData);
+        return true;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean placeOrders(List<OrderData> orderDataList) {
+        if (orderDataList == null || orderDataList.isEmpty()) {
+            return true;
+        }
+        for (OrderData orderData: orderDataList) {
+            // placeOrder不会触发事务
+            if (!placeOrder(orderData)) {
+                return false;
+            }
+        }
         return true;
     }
 
