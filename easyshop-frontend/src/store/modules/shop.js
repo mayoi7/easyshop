@@ -4,9 +4,13 @@ import {addToCart} from "../../api/commodity";
 
 const state = {
   token: getToken(),
+  cart: []
 }
 
 const mutations = {
+  SET_CART: (state, id) => {
+    state.cart.push(id)
+  }
 }
 
 const actions = {
@@ -28,9 +32,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       addToCart(id, state.token).then(response => {
         const { msg } = response
-        // if (!data) {
-        //   reject('Data wrong, please try again.')
-        // }
+        commit('SET_CART', id)
         resolve(msg)
       }).catch(error => {
         reject(error)
