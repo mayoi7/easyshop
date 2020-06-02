@@ -1,30 +1,28 @@
 <template>
   <div class="navbar">
-<!--    <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />-->
 
     <breadcrumb class="breadcrumb-container" />
 
     <div class="right-menu">
+      <div class="cart">
+        <a href="javascript:;" @click="routeCart">
+          <svg t="1591062056275" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1365" width="20" height="20" style="position: relative;top: 4px;"><path d="M406.7 893.6m-57.4 0a57.4 57.4 0 1 0 114.8 0 57.4 57.4 0 1 0-114.8 0Z" fill="#242424" p-id="1366"></path><path d="M708.7 893.6m-57.4 0a57.4 57.4 0 1 0 114.8 0 57.4 57.4 0 1 0-114.8 0Z" fill="#242424" p-id="1367"></path><path d="M938.3 204.7c-2.3-0.4-4.6-0.7-7-0.9h-640L281 117c-7.3-28.8-33-50.3-63.9-51.2H70.6c-22.6 0-41 18.3-41 41 0 22.6 18.3 41 41 41H178c12.4 0.9 24.6 10.1 26.8 22l0.3 2.5 2.1 17.7 64.5 538.5c5.2 32.4 33.3 57.2 67.2 57.2h446.7c22.6 0 41-18.3 41-41 0-22.6-18.3-41-41-41H373.2c-11.1-1.7-21.6-9.9-24.3-20.3l-7.3-61.3 463.9-25.4c15.1-1 27.7-10.2 34-22.8l0.6-1.2 135.2-286.1c12.5-31.7 1.1-74.6-37-81.9z" fill="#242424" p-id="1368"></path></svg>
+          购物车
+        </a>
+      </div>
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
           {{name}}
-<!--          <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">-->
-<!--          <i class="el-icon-caret-bottom" />-->
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
           <router-link to="/">
-            <el-dropdown-item>
-              Home
-            </el-dropdown-item>
+            <el-dropdown-item>主页</el-dropdown-item>
           </router-link>
           <a target="_blank" href="https://github.com/mayoi7/easyshop">
             <el-dropdown-item>Github</el-dropdown-item>
           </a>
-          <a target="_blank" href="#">
-            <el-dropdown-item>Docs</el-dropdown-item>
-          </a>
           <el-dropdown-item divided>
-            <span style="display:block;" @click="logout">Log Out</span>
+            <span style="display:block;" @click="logout">登出</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
@@ -35,12 +33,10 @@
 <script>
 import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
-// import Hamburger from '@/components/Hamburger'
 
 export default {
   components: {
     Breadcrumb
-    // Hamburger
   },
   computed: {
     ...mapGetters([
@@ -56,6 +52,9 @@ export default {
     async logout() {
       await this.$store.dispatch('user/logout')
       this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+    },
+    routeCart() {
+      this.$router.push("/cart");
     }
   }
 }
@@ -93,6 +92,12 @@ export default {
 
     &:focus {
       outline: none;
+    }
+
+    .cart {
+      display: inline-block;
+      margin: auto 20px;
+      font-weight: 700;
     }
 
     .right-menu-item {

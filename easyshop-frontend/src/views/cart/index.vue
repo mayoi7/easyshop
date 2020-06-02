@@ -187,86 +187,88 @@ export default {
 }
 </script>
 
-<style scoped>
-  .order .image {
-    width: 100px;
-    height: 100px;
-  }
+<style lang="scss" scoped>
 
-  .order .name {
-    display: inline-block;
-    position: relative;
-    top: -86px;
-    margin: auto 10px;
-  }
+  .cart {
+    .order {
+      .image {
+        width: 100px;
+        height: 100px;
+      }
 
-  .cart .order-submit-bar {
-    position: fixed;
-    bottom: 0;
-    height: 50px;
-  }
+      .name {
+        display: inline-block;
+        position: relative;
+        top: -86px;
+        margin: auto 10px;
+      }
+    }
 
-  .order-submit-bar {
-    width: 70rem;
-    background: #e6e6e6;
-    z-index: 5;
-  }
+    .order-submit-bar {
+      position: fixed;
+      bottom: 0;
+      height: 50px;
+      width: 70rem;
+      background: #e6e6e6;
+      z-index: 5;
 
-  .order-submit-bar .submit {
-    display: inline-block;
-    float: right;
-    width: 120px;
-    text-align: center;
-    background: #f40;
-    color: #fff;
-    height: 50px;
-    letter-spacing: 3px;
-    line-height: normal;
-  }
+      .submit {
+        display: inline-block;
+        float: right;
+        width: 120px;
+        text-align: center;
+        background: #f40;
+        color: #fff;
+        height: 50px;
+        letter-spacing: 3px;
+        line-height: normal;
 
-  .order-submit-bar .submit:hover {
-    background: #f22d00;
-  }
+        .submit-link {
+          line-height: 50px;
+          font-size: 20px;
+          width: 100%;
+          height: 100%;
+          display: block;
+        }
 
-  .order-submit-bar .submit .submit-link {
-    line-height: 50px;
-    font-size: 20px;
-    width: 100%;
-    height: 100%;
-    display: block;
-  }
+        &:hover {
+          background: #f22d00;
+        }
+      }
 
-  .order-submit-bar .label {
-    display: inline-block;
-    height: 50px;
-    line-height: 50px;
-  }
+      .label {
+        display: inline-block;
+        height: 50px;
+        line-height: 50px;
+      }
 
-  .order-submit-bar span.quantity {
-    padding: 0 5px;
-    color: #f40;
-    font-weight: 700;
-    font-size: 18px;
-    position: relative;
-    top: 1px;
-  }
+      span.quantity {
+        padding: 0 5px;
+        color: #f40;
+        font-weight: 700;
+        font-size: 18px;
+        position: relative;
+        top: 1px;
+      }
 
-  span.price {
-    padding: 0 5px;
-    color: #f40;
-    font-weight: 700;
-    font-size: 22px;
-    position: relative;
-    left: -12px;
-    top: 2px;
+      span.price {
+        padding: 0 5px;
+        color: #f40;
+        font-weight: 700;
+        font-size: 22px;
+        position: relative;
+        left: -12px;
+        top: 2px;
+      }
+    }
   }
 
   a.e-link {
     text-decoration: #1482f0 !important;
-  }
 
-  a.e-link:hover {
-    color: #1482f0;
+    &:hover {
+      color: #1482f0;
+    }
   }
 
   a.disabled {

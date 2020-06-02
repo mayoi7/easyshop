@@ -49,27 +49,28 @@ export default {
 }
 </script>
 
-<style scoped>
-  .commodity {
-    display: inline-block;
-    margin: 15px 30px;
-  }
+<style lang="scss" scoped>
+.commodity {
+  display: inline-block;
+  margin: 15px 30px;
+
   .commodity-card {
     width: 300px;
     height: 375px;
-  }
 
-  .commodity-card .image {
-    width: 250px;
-    height: 250px;
-  }
+    .image {
+      width: 250px;
+      height: 250px;
+    }
 
-  .commodity-card .name {
-    margin: 4px auto;
-    font-size: 20px;
-  }
+    .name {
+      margin: 4px auto;
+      font-size: 20px;
+    }
 
-  .commodity-card .add {
-    float: right;
+    .add {
+      float: right;
+    }
   }
+}
 </style>
