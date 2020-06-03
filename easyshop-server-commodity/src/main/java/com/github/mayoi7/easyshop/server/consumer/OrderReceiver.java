@@ -47,7 +47,7 @@ public class OrderReceiver {
                 .userId(orderData.getUserId()).commodityId(orderData.getCommodityId())
                 .price(orderData.getPrice()).quantity(orderData.getQuantity()).total(total)
                 .build();
-        orderMapper.insertSelective(order);
+        orderMapper.insertOrder(order);
         redisService.setInList(RedisKeys.ORDER_USER, orderData.getUserId().toString(), order);
         log.info("[<MESSAGE>ORDER] place order success" +
                 " <id={}, user={}, commodity={}, price={}, quantity={}>",

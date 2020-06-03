@@ -10,4 +10,10 @@ import tk.mybatis.mapper.MyMapper;
  * @email acerola.orion@foxmail.com
  */
 public interface OrderMapper extends MyMapper<Order> {
+
+    /**
+     * 插入订单，插入后的主键会返回到Order数据的id属性中
+     * @param order 订单数据
+     */
+    void insertOrder(Order order);
 }
