@@ -17,4 +17,8 @@
     id, user_id, commodity_id, quantity, price, total, create_time
   </sql>
 
+  <insert id="insertOrder" parameterType="com.github.mayoi7.easyshop.po.Order"  useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO `order`(user_id,commodity_id,quantity,price,total )
+    VALUES(#{userId}, #{commodityId}, #{quantity}, #{price}, #{total});
+  </insert>
 </mapper>
