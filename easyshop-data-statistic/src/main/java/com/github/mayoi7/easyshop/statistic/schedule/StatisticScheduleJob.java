@@ -2,8 +2,8 @@ package com.github.mayoi7.easyshop.statistic.schedule;
 
 import com.github.mayoi7.easyshop.constant.RedisKeys;
 import com.github.mayoi7.easyshop.po.Statistic;
-import com.github.mayoi7.easyshop.service.RedisService;
 import com.github.mayoi7.easyshop.service.StatisticService;
+import com.github.mayoi7.easyshop.statistic.service.RedisService;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.JobExecutionContext;

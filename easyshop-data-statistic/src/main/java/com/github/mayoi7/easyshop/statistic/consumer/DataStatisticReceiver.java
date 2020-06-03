@@ -3,7 +3,7 @@ package com.github.mayoi7.easyshop.statistic.consumer;
 import com.alibaba.fastjson.JSON;
 import com.github.mayoi7.easyshop.constant.RedisKeys;
 import com.github.mayoi7.easyshop.dto.TransData;
-import com.github.mayoi7.easyshop.service.RedisService;
+import com.github.mayoi7.easyshop.statistic.service.RedisService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -29,6 +29,7 @@ public class DataStatisticReceiver {
      */
     @StreamListener("trans-data-topic")
     public void receiveTransData(@Payload TransData transData) {
+        log.info("[STATISTIC] get statistic message <amount={}>", transData.getAmount());
         redisService.addAndGet(RedisKeys.TRANSACTION_DATA, transData.getAmount().doubleValue());
     }
 }

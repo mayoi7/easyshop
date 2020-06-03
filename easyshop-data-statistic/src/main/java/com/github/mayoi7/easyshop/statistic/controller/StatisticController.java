@@ -3,7 +3,7 @@ package com.github.mayoi7.easyshop.statistic.controller;
 import com.github.mayoi7.easyshop.constant.RedisKeys;
 import com.github.mayoi7.easyshop.dto.ResponseResult;
 import com.github.mayoi7.easyshop.dto.ResponseResult.StateCode;
-import com.github.mayoi7.easyshop.service.RedisService;
+import com.github.mayoi7.easyshop.statistic.service.RedisService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
