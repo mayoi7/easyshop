@@ -26,4 +26,12 @@ public interface CartService {
      * @return 返回用户购物车商品列表信息
      */
     List<CartCommodity> loadCart(String username);
+
+    /**
+     * 从购物车移除商品
+     * @param username 用户名
+     * @param commodityId 商品id
+     * @return true：表示移除成功，或用户本身就未添加该商品到购物车
+     */
+    boolean removeCart(String username, Long commodityId);
 }
