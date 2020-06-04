@@ -40,6 +40,22 @@ public class CartController {
         }
     }
 
+    /**
+     * 将商品从购物车移除
+     * @param commodityId 商品id
+     * @return 返回移除是否成功的响应
+     */
+    @DeleteMapping("/{commodityId}")
+    public ResponseResult<Void> removeCart(@PathVariable("commodityId") Long commodityId) {
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        boolean result = cartService.removeCart(name, commodityId);
+        if (result) {
+            return ResponseResult.SUCCESS;
+        } else {
+            return new ResponseResult<>(StateCode.FAIL, "移除购物车异常，请重试", null);
+        }
+    }
+
     @GetMapping("/")
     public ResponseResult<List<CartCommodity>> listCart() {
         String name = SecurityContextHolder.getContext().getAuthentication().getName();

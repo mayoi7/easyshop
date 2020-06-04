@@ -72,6 +72,10 @@
 export default {
   name: "Cart",
   data() {
+    let $cart = this.$store.state.shop.cart;
+    for (let i=0; i<$cart.length; i++) {
+
+    }
     return {
       orders: [
         {

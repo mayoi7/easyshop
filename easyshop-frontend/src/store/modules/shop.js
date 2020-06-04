@@ -1,6 +1,5 @@
 import { getToken } from '@/utils/auth'
-import { listCommodities } from "@/api/commodity";
-import {addToCart} from "../../api/commodity";
+import { listCommodities, addToCart, getCommodity, removeFromCart } from "@/api/commodity";
 
 const state = {
   token: getToken(),
@@ -10,6 +9,9 @@ const state = {
 const mutations = {
   SET_CART: (state, id) => {
     state.cart.push(id)
+  },
+  REMOVE_CART: (state, id) => {
+    state.cart.remove(id)
   }
 }
 
@@ -34,6 +36,27 @@ const actions = {
         const { msg } = response
         commit('SET_CART', id)
         resolve(msg)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+  removeCart({ commit, state }, id) {
+    return new Promise((resolve, reject) => {
+      removeFromCart(id, state.token).then(response => {
+        const { msg } = response
+        commit('REMOVE_CART', id)
+        resolve(msg)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+  commodity({ commit, state }, id) {
+    return new Promise((resolve, reject) => {
+      getCommodity(id, state.token).then(response => {
+        const { data } = response
+        resolve(data)
       }).catch(error => {
         reject(error)
       })

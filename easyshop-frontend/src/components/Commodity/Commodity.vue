@@ -7,8 +7,8 @@
         <strong style="color: #F40;font-weight: 700;">{{commodity.currentPrice}}</strong>
       </div>
       <div class="name">{{commodity.name}}</div>
-      <el-button v-if="!state.cart" type="medium" plain class="add" @click="addCart" :loading="loadings.cart_add">添加到购物车</el-button>
-      <el-button v-else type="medium" plain disabled class="add">已添加</el-button>
+      <el-button v-if="!state.cart" size="medium" plain class="add" @click="addCart" :loading="loadings.cart_add">添加到购物车</el-button>
+      <el-button v-else type="danger" size="medium" plain class="add" @click="removeCart">取消</el-button>
     </el-card>
   </div>
 </template>
@@ -34,6 +34,17 @@ export default {
       this.$store.dispatch('shop/cart', this.commodity.id).then(msg => {
         this.loadings.cart_add = false;
         this.state.cart = true;
+        this.$message({
+          message: msg,
+          type: 'success'
+        });
+      })
+    },
+    removeCart() {
+      this.loadings.cart_add = true;
+      this.$store.dispatch('shop/removeCart', this.commodity.id).then(msg => {
+        this.loadings.cart_add = false;
+        this.state.cart = false;
         this.$message({
           message: msg,
           type: 'success'

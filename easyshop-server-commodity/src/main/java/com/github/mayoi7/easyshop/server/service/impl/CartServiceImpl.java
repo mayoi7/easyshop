@@ -61,4 +61,12 @@ public class CartServiceImpl implements CartService {
         });
         return cartList;
     }
+
+    @Override
+    public boolean removeCart(String username, Long commodityId) {
+        if (redisService.checkExistenceInSet(RedisKeys.CART_LIST, username, commodityId)) {
+            redisService.removeFromSet(RedisKeys.CART_LIST, username, commodityId);
+        }
+        return true;
+    }
 }

@@ -25,9 +25,9 @@ public class RedisServiceImpl implements RedisService {
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
 
-    private String spliceKey(String cacheName, String key) {
+    private String spliceKey(String group, String key) {
         // 编译时会自动转换为StringBuilder的拼接方式
-        return cacheName + "::" + key;
+        return group + "::" + key;
     }
 
     @Override
@@ -36,8 +36,8 @@ public class RedisServiceImpl implements RedisService {
     }
 
     @Override
-    public void set(String cacheName, String key, Object value) {
-        set(spliceKey(cacheName, key), value);
+    public void set(String group, String key, Object value) {
+        set(spliceKey(group, key), value);
     }
 
     @Override
@@ -52,13 +52,13 @@ public class RedisServiceImpl implements RedisService {
     }
 
     @Override
-    public Long setInList(String cacheName, String key, Object value) {
-        return setInList(spliceKey(cacheName, key), value);
+    public Long setInList(String group, String key, Object value) {
+        return setInList(spliceKey(group, key), value);
     }
 
     @Override
-    public Long setInListWithExpire(String cacheName, String key, Object value, long expire) {
-        return setInListWithExpire(spliceKey(cacheName, key), value, expire);
+    public Long setInListWithExpire(String group, String key, Object value, long expire) {
+        return setInListWithExpire(spliceKey(group, key), value, expire);
     }
 
     @Override
@@ -67,8 +67,8 @@ public class RedisServiceImpl implements RedisService {
     }
 
     @Override
-    public Object getInList(String cacheName, String key) {
-        return getInList(spliceKey(cacheName, key));
+    public Object getInList(String group, String key) {
+        return getInList(spliceKey(group, key));
     }
 
     @Override
@@ -81,8 +81,8 @@ public class RedisServiceImpl implements RedisService {
     }
 
     @Override
-    public List<Object> getAllInList(String cacheName, String key) {
-        return getAllInList(spliceKey(cacheName, key));
+    public List<Object> getAllInList(String group, String key) {
+        return getAllInList(spliceKey(group, key));
     }
 
 
@@ -92,8 +92,8 @@ public class RedisServiceImpl implements RedisService {
     }
 
     @Override
-    public void setWithExpire(String cacheName, String key, Object value, long seconds) {
-        setWithExpire(spliceKey(cacheName, key), value, seconds);
+    public void setWithExpire(String group, String key, Object value, long seconds) {
+        setWithExpire(spliceKey(group, key), value, seconds);
     }
 
     @Override
@@ -102,8 +102,8 @@ public class RedisServiceImpl implements RedisService {
     }
 
     @Override
-    public void setInSet(String cacheName, String key, Object value) {
-        setInSet(spliceKey(cacheName, key), value);
+    public void setInSet(String group, String key, Object value) {
+        setInSet(spliceKey(group, key), value);
     }
 
     @Override
@@ -113,8 +113,8 @@ public class RedisServiceImpl implements RedisService {
     }
 
     @Override
-    public void setInSetWithExpire(String cacheName, String key, Object value, long seconds) {
-        setInSetWithExpire(spliceKey(cacheName, key), value, seconds);
+    public void setInSetWithExpire(String group, String key, Object value, long seconds) {
+        setInSetWithExpire(spliceKey(group, key), value, seconds);
     }
 
     @Override
@@ -123,8 +123,8 @@ public class RedisServiceImpl implements RedisService {
     }
 
     @Override
-    public Boolean checkExistenceInSet(String cacheName, String key, Object value) {
-        return checkExistenceInSet(spliceKey(cacheName, key), value);
+    public Boolean checkExistenceInSet(String group, String key, Object value) {
+        return checkExistenceInSet(spliceKey(group, key), value);
     }
 
     @Override
@@ -133,8 +133,8 @@ public class RedisServiceImpl implements RedisService {
     }
 
     @Override
-    public Set<Object> getAllInSet(String cacheName, String key) {
-        return getAllInSet(spliceKey(cacheName, key));
+    public Set<Object> getAllInSet(String group, String key) {
+        return getAllInSet(spliceKey(group, key));
     }
 
     @Override
@@ -143,8 +143,8 @@ public class RedisServiceImpl implements RedisService {
     }
 
     @Override
-    public Object get(String cacheName, String key) {
-        return get(spliceKey(cacheName, key));
+    public Object get(String group, String key) {
+        return get(spliceKey(group, key));
     }
 
     @Override
@@ -153,8 +153,18 @@ public class RedisServiceImpl implements RedisService {
     }
 
     @Override
-    public void del(String cacheName, String key) {
-        del(spliceKey(cacheName, key));
+    public void del(String group, String key) {
+        del(spliceKey(group, key));
+    }
+
+    @Override
+    public void removeFromSet(String key, Object value) {
+        redisTemplate.opsForSet().remove(key, value);
+    }
+
+    @Override
+    public void removeFromSet(String group, String key, Object value) {
+        removeFromSet(spliceKey(group, key), value);
     }
 
     @Override
