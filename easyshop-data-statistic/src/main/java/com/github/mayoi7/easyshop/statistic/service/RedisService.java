@@ -28,9 +28,17 @@ public interface RedisService {
 
     void del(String key);
 
-    void del(String cacheName, String key);Double count(String key);
+    void del(String cacheName, String key);
+
+    Double count(String key);
+
+    Double count(String group, String key);
 
     void initCounter(String key, double initVal);
 
+    void initCounter(String group, String key, double initVal);
+
     Double addAndGet(String key, Double added);
+
+    Double addAndGet(String group, String key, Double added);
 }

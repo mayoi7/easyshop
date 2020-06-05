@@ -6,6 +6,7 @@ import com.github.mayoi7.easyshop.dto.ResponseResult.StateCode;
 import com.github.mayoi7.easyshop.statistic.service.RedisService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,9 +26,21 @@ public class StatisticController {
     @Resource
     private RedisService redisService;
 
-    @GetMapping("/trans")
+    @GetMapping("/trans/total")
     public ResponseResult<BigDecimal> countTransactionRecord() {
         Double total = redisService.count(RedisKeys.TRANSACTION_DATA);
+        if (total == null) {
+            // TODO: 2020/5/18 改为从数据库中进行统计
+            log.error("[STATISTIC] total transaction record is null in redis");
+            return new ResponseResult<>(StateCode.FAIL, "缓存数据缺失", null);
+        } else {
+            return new ResponseResult<>(BigDecimal.valueOf(total));
+        }
+    }
+
+    @GetMapping("/trans/user/{userId}")
+    public ResponseResult<BigDecimal> countUserTransactionRecord(@PathVariable Long userId) {
+        Double total = redisService.count(RedisKeys.TRANSACTION_DATA, userId.toString());
         if (total == null) {
             // TODO: 2020/5/18 改为从数据库中进行统计
             log.error("[STATISTIC] total transaction record is null in redis");

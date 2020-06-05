@@ -23,16 +23,16 @@ public class MessageController {
     @Resource
     private MessageProducer messageProducer;
 
-    @GetMapping("send")
-    public ResponseResult<Void> sendMsgTest() {
-        // 构造测试数据
-        double amount = 10.5;
-        TransData data = new TransData(1L, BigDecimal.valueOf(amount));
-        boolean isSuccess = messageProducer.sendTransData(data);
-        if (isSuccess) {
-            return ResponseResult.SUCCESS;
-        } else {
-            return new ResponseResult<>(StateCode.FAIL, "发送失败", null);
-        }
-    }
+//    @GetMapping("send")
+//    public ResponseResult<Void> sendMsgTest() {
+//        // 构造测试数据
+//        double amount = 10.5;
+//        TransData data = new TransData("aaa", BigDecimal.valueOf(amount));
+//        boolean isSuccess = messageProducer.sendTransData(data);
+//        if (isSuccess) {
+//            return ResponseResult.SUCCESS;
+//        } else {
+//            return new ResponseResult<>(StateCode.FAIL, "发送失败", null);
+//        }
+//    }
 }

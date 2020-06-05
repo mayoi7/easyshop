@@ -73,6 +73,11 @@ public class RedisServiceImpl implements RedisService {
     }
 
     @Override
+    public Double count(String group, String key) {
+        return count(spliceKey(group, key));
+    }
+
+    @Override
     public void initCounter(String key, double initVal) {
         RedisAtomicDouble counter = new RedisAtomicDouble(key,
                 Objects.requireNonNull(redisTemplate.getConnectionFactory()));
@@ -80,9 +85,19 @@ public class RedisServiceImpl implements RedisService {
     }
 
     @Override
+    public void initCounter(String group, String key, double initVal) {
+        initCounter(spliceKey(group, key), initVal);
+    }
+
+    @Override
     public Double addAndGet(String key, Double added) {
         RedisAtomicDouble counter = new RedisAtomicDouble(key,
                 Objects.requireNonNull(redisTemplate.getConnectionFactory()));
         return counter.addAndGet(added);
+    }
+
+    @Override
+    public Double addAndGet(String group, String key, Double added) {
+        return addAndGet(spliceKey(group, key), added);
     }
 }
