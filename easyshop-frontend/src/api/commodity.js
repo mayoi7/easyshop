@@ -28,3 +28,5 @@ export function removeFromCart(id, token) {
     method: 'delete'
   })
 }
+
+

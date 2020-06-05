@@ -29,7 +29,11 @@ public class DataStatisticReceiver {
      */
     @StreamListener("trans-data-topic")
     public void receiveTransData(@Payload TransData transData) {
-        log.info("[STATISTIC] get statistic message <amount={}>", transData.getAmount());
+        log.info("[STATISTIC] get statistic message <user_id={}, amount={}>", transData.getUserId(),
+                transData.getAmount());
+        // 添加两个数据记录
         redisService.addAndGet(RedisKeys.TRANSACTION_DATA, transData.getAmount().doubleValue());
+        redisService.addAndGet(RedisKeys.TRANSACTION_DATA, transData.getUserId().toString(),
+                transData.getAmount().doubleValue());
     }
 }

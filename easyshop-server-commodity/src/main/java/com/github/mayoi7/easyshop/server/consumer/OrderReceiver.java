@@ -40,12 +40,12 @@ public class OrderReceiver {
      */
     @StreamListener("order-topic")
     public void placeOrder(@Payload OrderData orderData) {
-        // 下订单
-        BigDecimal total = orderData.getPrice().multiply(
-                BigDecimal.valueOf(orderData.getQuantity()));
+//        // 下订单
+//        BigDecimal total = orderData.getPrice().multiply(
+//                BigDecimal.valueOf(orderData.getQuantity()));
         Order order = Order.builder()
                 .userId(orderData.getUserId()).commodityId(orderData.getCommodityId())
-                .price(orderData.getPrice()).quantity(orderData.getQuantity()).total(total)
+                .price(orderData.getPrice()).quantity(orderData.getQuantity()).total(orderData.getTotal())
                 .build();
         orderMapper.insertOrder(order);
         redisService.setInList(RedisKeys.ORDER_USER, orderData.getUserId().toString(), order);

@@ -1,6 +1,7 @@
 package com.github.mayoi7.easyshop.server.service.impl;
 
 import com.github.mayoi7.easyshop.constant.RedisKeys;
+import com.github.mayoi7.easyshop.dto.TransData;
 import com.github.mayoi7.easyshop.dto.order.OrderData;
 import com.github.mayoi7.easyshop.po.Commodity;
 import com.github.mayoi7.easyshop.po.Inventory;
@@ -104,6 +105,9 @@ public class OrderServiceImpl implements OrderService {
         log.info("[MESSAGE] sending msg to place order <user_id={}, commodity_id={}, price={}, amount={}>",
                 userIdString, orderData.getCommodityId(), orderData.getPrice(), orderData.getQuantity());
         producer.sendOrderRequest(orderData);
+
+        // 发送交易数据统计消息
+        producer.sendTransData(new TransData(orderData.getUserId(), orderData.getTotal()));
         return true;
     }
 

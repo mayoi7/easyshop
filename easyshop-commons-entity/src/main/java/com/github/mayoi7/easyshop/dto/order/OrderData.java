@@ -35,11 +35,16 @@ public class OrderData implements Serializable {
     /** 下单商品数量 */
     private Integer quantity;
 
+    /** 总价 */
+    private BigDecimal total;
+
     public OrderData(OrderParam param, Long userId) {
         this.commodityId = param.getCommodityId();
         this.price = BigDecimal.valueOf(param.getPrice());
         this.quantity = param.getQuantity();
 
         this.userId = userId;
+
+        this.total = this.price.multiply(BigDecimal.valueOf(this.quantity));
     }
 }
