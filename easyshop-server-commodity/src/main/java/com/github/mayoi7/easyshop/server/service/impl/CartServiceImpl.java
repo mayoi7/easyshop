@@ -9,8 +9,8 @@ import com.github.mayoi7.easyshop.service.InventoryService;
 import com.github.mayoi7.easyshop.service.RedisService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.Reference;
+import org.apache.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -68,5 +68,10 @@ public class CartServiceImpl implements CartService {
             redisService.removeFromSet(RedisKeys.CART_LIST, username, commodityId);
         }
         return true;
+    }
+
+    @Override
+    public boolean test(int value) {
+        return value == 1;
     }
 }

@@ -12,6 +12,8 @@ spring:
         namespace: 9a1cb6c8-7909-4aef-bd16-71de1b274b7c
         file-extension: yaml
         group: EASYSHOP
+        refresh:
+          enabled: false
 
 management:
   endpoints:

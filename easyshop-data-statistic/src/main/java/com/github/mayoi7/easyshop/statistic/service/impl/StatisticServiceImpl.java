@@ -1,9 +1,10 @@
 package com.github.mayoi7.easyshop.statistic.service.impl;
 
 import com.github.mayoi7.easyshop.po.Statistic;
+import com.github.mayoi7.easyshop.service.RedisService;
 import com.github.mayoi7.easyshop.service.StatisticService;
 import com.github.mayoi7.easyshop.statistic.mapper.StatisticMapper;
-import com.github.mayoi7.easyshop.statistic.service.RedisService;
+import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +22,7 @@ public class StatisticServiceImpl implements StatisticService {
     @Resource
     private StatisticMapper statisticMapper;
 
-    @Resource
+    @Reference
     private RedisService redisService;
 
     @Override
