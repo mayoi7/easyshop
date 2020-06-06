@@ -84,10 +84,10 @@
         </dependency>
 
         <!-- cloud -->
-<!--        <dependency>-->
-<!--        <groupId>com.alibaba.cloud</groupId>-->
-<!--        <artifactId>spring-cloud-alibaba-dubbo</artifactId>-->
-<!--    </dependency>-->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-alibaba-dubbo</artifactId>
+        </dependency>
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>

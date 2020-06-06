@@ -34,4 +34,11 @@ public interface CartService {
      * @return true：表示移除成功，或用户本身就未添加该商品到购物车
      */
     boolean removeCart(String username, Long commodityId);
+
+    /**
+     * 测试方法
+     * @param value
+     * @return value为1则返回true，否则返回false
+     */
+    boolean test(int value);
 }
