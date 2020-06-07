@@ -58,6 +58,11 @@ export const constantRoutes = [
         path: 'cart',
         name: 'Cart',
         component: () => import('@/views/cart/index')
+      },
+      {
+        path: 'order',
+        name: 'Order',
+        component: () => import('@/views/order/index')
       }
     ]
   },
