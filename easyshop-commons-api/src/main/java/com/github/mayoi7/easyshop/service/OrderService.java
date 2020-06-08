@@ -1,6 +1,7 @@
 package com.github.mayoi7.easyshop.service;
 
 import com.github.mayoi7.easyshop.dto.order.OrderData;
+import com.github.mayoi7.easyshop.dto.order.OrderDetail;
 import com.github.mayoi7.easyshop.po.Order;
 
 import java.math.BigDecimal;
@@ -39,11 +40,27 @@ public interface OrderService {
     boolean placeOrders(List<OrderData> orderDataList);
 
     /**
-     * 根据下单商品和用户id查询对应所有订单
+     * 根据订单号查询订单
+     * @param orderId 订单编号（数据库主键）
+     * @return 返回订单数据
+     */
+    Order findById(Long orderId);
+
+    /**
+     * 查询某用户的所有订单
      * @param userId 用户id
      * @param timePoint 时间点
      * @param isAfter 表示查询时间点以后的还是以前的数据。true：查询时间点之后的订单
-     * @return 返回订单列表，如果不存在则返回空链表（非null对象）
+     * @return 返回订单列表，如果不存在则返回空链表，如果参数错误则返回null
      */
     List<Order> findListByUserAndTime(Long userId, Date timePoint, boolean isAfter);
+
+    /**
+     * 查询某用户所有订单的详细信息
+     * @param userId 用户id
+     * @param timePoint 时间点
+     * @param isAfter 表示查询时间点以后的还是以前的数据。true：查询时间点之后的订单
+     * @return 返回订单详情列表，如果不存在则返回空链表，如果参数错误则返回null
+     */
+    List<OrderDetail> findDetailListByUserAndTime(Long userId, Date timePoint, boolean isAfter);
 }

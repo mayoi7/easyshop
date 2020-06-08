@@ -2,19 +2,26 @@ package com.github.mayoi7.easyshop.server.controller;
 
 import com.github.mayoi7.easyshop.dto.ResponseResult;
 import com.github.mayoi7.easyshop.dto.ResponseResult.StateCode;
+import com.github.mayoi7.easyshop.dto.commodity.CommodityInfo;
 import com.github.mayoi7.easyshop.dto.order.OrderData;
+import com.github.mayoi7.easyshop.dto.order.OrderDetail;
 import com.github.mayoi7.easyshop.dto.order.OrderList;
 import com.github.mayoi7.easyshop.dto.order.OrderParam;
+import com.github.mayoi7.easyshop.po.Commodity;
+import com.github.mayoi7.easyshop.po.Order;
 import com.github.mayoi7.easyshop.po.User;
+import com.github.mayoi7.easyshop.service.CommodityService;
 import com.github.mayoi7.easyshop.service.OrderService;
 import com.github.mayoi7.easyshop.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -29,6 +36,9 @@ public class OrderController {
 
     @Resource
     private OrderService orderService;
+
+    @Resource
+    private CommodityService commodityService;
 
     @Reference
     private UserService userService;
@@ -78,6 +88,55 @@ public class OrderController {
             return ResponseResult.SUCCESS;
         } else {
             return new ResponseResult<>(StateCode.FAIL, "购买商品失败，请重试", null);
+        }
+    }
+
+    /**
+     * 根据订单号查询对应订单
+     * @param orderId 订单号
+     * @return 返回查询到的订单数据
+     */
+    @GetMapping("/{orderId}")
+    public ResponseResult<OrderDetail> findOrder(@PathVariable("orderId") Long orderId) {
+        Order order = orderService.findById(orderId);
+        if (order == null) {
+            return new ResponseResult<>(StateCode.WRONG_PARAM, "订单不存在", null);
+        }
+        Long commodityId = order.getCommodityId();
+        Commodity commodity = commodityService.findById(commodityId);
+        if (commodity == null) {
+            log.error("[ORDER] commodity corresponding to this order does not exist " +
+                    "<order_id={}, commodity_id={}>", orderId, commodityId);
+            return new ResponseResult<>(StateCode.DATA_ABNORMAL, "数据有误，请稍后再试", null);
+        }
+        CommodityInfo commodityInfo = new CommodityInfo(commodity);
+        OrderDetail orderDetail = new OrderDetail(order, commodityInfo);
+        return new ResponseResult<>(orderDetail);
+    }
+
+    /**
+     * 查询某用户的所有订单
+     * @param userId 用户id，默认值为当前登陆用户
+     * @param timePoint 时间点
+     * @param isAfter true：表示查询在时间点之后的数据；false：表示查询在时间点之前的数据
+     * @return 返回订单详细数据列表
+     */
+    @GetMapping("/list/{userId}")
+    public ResponseResult<List<OrderDetail>> findDetailList(@PathVariable(
+                    value = "userId", required = false) Long userId,
+                    @RequestParam("timePoint") Date timePoint,
+                    @RequestParam(value = "isAfter", defaultValue = "true") boolean isAfter) {
+        if (userId == null) {
+            String name = SecurityContextHolder.getContext().getAuthentication().getName();
+            userId = userService.findUserByName(name).getId();
+        }
+        List<OrderDetail> orderDetails = orderService.findDetailListByUserAndTime(userId, timePoint, isAfter);
+        if (orderDetails == null) {
+            return new ResponseResult<>(StateCode.WRONG_PARAM, "参数不正确", null);
+        } else if (orderDetails.isEmpty()) {
+            return new ResponseResult<>(StateCode.DATA_ABNORMAL, "数据异常，请稍后再试", null);
+        } else {
+            return new ResponseResult<>(orderDetails);
         }
     }
 }
