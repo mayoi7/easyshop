@@ -2,7 +2,9 @@ package com.github.mayoi7.easyshop.server.service.impl;
 
 import com.github.mayoi7.easyshop.constant.RedisKeys;
 import com.github.mayoi7.easyshop.dto.TransData;
+import com.github.mayoi7.easyshop.dto.commodity.CommodityInfo;
 import com.github.mayoi7.easyshop.dto.order.OrderData;
+import com.github.mayoi7.easyshop.dto.order.OrderDetail;
 import com.github.mayoi7.easyshop.po.Commodity;
 import com.github.mayoi7.easyshop.po.Inventory;
 import com.github.mayoi7.easyshop.po.Order;
@@ -10,6 +12,7 @@ import com.github.mayoi7.easyshop.server.mapper.CommodityMapper;
 import com.github.mayoi7.easyshop.server.mapper.InventoryMapper;
 import com.github.mayoi7.easyshop.server.mapper.OrderMapper;
 import com.github.mayoi7.easyshop.server.producer.MessageProducer;
+import com.github.mayoi7.easyshop.service.CommodityService;
 import com.github.mayoi7.easyshop.service.InventoryService;
 import com.github.mayoi7.easyshop.service.OrderService;
 import com.github.mayoi7.easyshop.service.RedisService;
@@ -23,6 +26,7 @@ import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -39,7 +43,7 @@ public class OrderServiceImpl implements OrderService {
     private OrderMapper orderMapper;
 
     @Resource
-    private CommodityMapper commodityMapper;
+    private CommodityService commodityService;
 
     @Resource
     private InventoryService inventoryService;
@@ -59,7 +63,7 @@ public class OrderServiceImpl implements OrderService {
             log.info("[CACHE] price list is null, will reset new value <key(commodity_id)={}>", commodityId);
             Commodity commodity = (Commodity) redisService.get(RedisKeys.COMMODITY_ID, commodityId.toString());
             if (commodity == null) {
-                if ((commodity = commodityMapper.selectByPrimaryKey(commodityId)) == null) {
+                if ((commodity = commodityService.findById(commodityId)) == null) {
                     log.error("[COMMODITY] commodity is not found with such id <commodity_id={}>", commodityId);
                     return false;
                 }
@@ -127,8 +131,38 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> findListByUserAndTime(Long commodityId, Date timePoint, boolean isAfter) {
+    public Order findById(Long orderId) {
+        return orderMapper.selectByPrimaryKey(orderId);
+    }
 
-        return null;
+    @Override
+    public List<Order> findListByUserAndTime(Long userId, Date timePoint, boolean isAfter) {
+        if (userId == null || timePoint == null) {
+            return null;
+        }
+        return orderMapper.selectOrderByUserAndTime(userId, timePoint, isAfter);
+    }
+
+    @Override
+    public List<OrderDetail> findDetailListByUserAndTime(Long userId, Date timePoint, boolean isAfter) {
+        List<Order> orders = findListByUserAndTime(userId, timePoint, isAfter);
+        if (orders == null) {
+            return null;
+        } else if (orders.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        List<OrderDetail> orderDetails = new ArrayList<>(orders.size());
+        orders.forEach(order -> {
+            Commodity commodity = commodityService.findById(order.getCommodityId());
+            if (commodity == null) {
+                log.error("[ORDER] commodity corresponding to this order does not exist " +
+                        "<order_id={}, commodity_id={}>", order.getId(), order.getCommodityId());
+            } else {
+                CommodityInfo commodityInfo = new CommodityInfo(commodity);
+                orderDetails.add(new OrderDetail(order, commodityInfo));
+            }
+        });
+        return orderDetails;
     }
 }

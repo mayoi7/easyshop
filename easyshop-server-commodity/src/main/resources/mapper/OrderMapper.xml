@@ -21,4 +21,20 @@
     INSERT INTO `order`(user_id,commodity_id,quantity,price,total )
     VALUES(#{userId}, #{commodityId}, #{quantity}, #{price}, #{total});
   </insert>
+
+  <select id="selectOrderByUserAndTime" resultMap="BaseResultMap">
+  SELECT
+    *
+  FROM
+    `order`
+  WHERE
+    user_id = #{userId}
+      <if test="ifAfter == true">
+        AND create_time &gt; #{createTime}
+      </if>
+      <if test="ifAfter == false">
+        AND create_time &lt; #{createTime}
+      </if>
+  ORDER BY id DESC;
+  </select>
 </mapper>

@@ -57,8 +57,10 @@ public class ResponseResult<T> {
     public enum StateCode {
         /** 请求成功 */
         OK(20000, "Success"),
-        /** 参数错误 */
+        /** 参数格式错误 */
         ILLEGAL_PARAM(40001, "Illegal param"),
+        /** 参数值错误 */
+        WRONG_PARAM(40002, "Wrong param"),
         /** 请求失败 */
         FAIL(50000, "Fail"),
         /** token不合法 */
@@ -70,7 +72,9 @@ public class ResponseResult<T> {
         /** 登陆异常 */
         LOGIN_ABNORMAL(50015, "Login abnormal"),
         /** 文件保存失败 */
-        FILE_SAVED_FAIL(50020, "File saved fail");
+        FILE_SAVED_FAIL(50020, "File saved fail"),
+        /** 服务器数据异常 */
+        DATA_ABNORMAL(50030, "Data abnormal");
 
         private int code;
         private String msg;
