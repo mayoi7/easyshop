@@ -38,7 +38,7 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public boolean addCart(String username, Long commodityId) {
-        if (redisService.checkExistenceInSet(RedisKeys.CART_LIST, username, commodityId)) {
+        if (redisService.checkExistenceInSet(RedisKeys.CART_LIST, username, commodityId.intValue())) {
             return false;
         }
         redisService.setInSet(RedisKeys.CART_LIST, username, commodityId);

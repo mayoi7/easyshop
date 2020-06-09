@@ -29,4 +29,11 @@ export function removeFromCart(id, token) {
   })
 }
 
+export function listCart(n) {
+  return request({
+    url: '/shop/cart/',
+    method: 'get'
+  })
+}
+
 

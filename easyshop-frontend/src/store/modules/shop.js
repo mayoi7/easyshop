@@ -1,5 +1,5 @@
 import { getToken } from '@/utils/auth'
-import { listCommodities, addToCart, getCommodity, removeFromCart } from "@/api/commodity";
+import { listCommodities, addToCart, getCommodity, removeFromCart, listCart } from "@/api/commodity";
 
 const state = {
   token: getToken(),
@@ -20,9 +20,9 @@ const actions = {
   list({ commit, state }, pageData) {
     return new Promise((resolve, reject) => {
       listCommodities(pageData.page, state.token).then(response => {
-        const { data } = response
+        const { msg, data } = response
         if (!data) {
-          reject('Data wrong, please try again.')
+          reject(msg)
         }
         resolve(data)
       }).catch(error => {
@@ -61,7 +61,17 @@ const actions = {
         reject(error)
       })
     })
-  }
+  },
+  listCart({ commit, state }) {
+    return new Promise((resolve, reject) => {
+      listCart().then(response => {
+        const { data } = response
+        resolve(data)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
 }
 
 export default {

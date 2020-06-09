@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
@@ -14,7 +15,9 @@ import java.math.BigDecimal;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderParam {
+public class OrderParam implements Serializable {
+
+    private static final long serialVersionUID = 7748334009262034420L;
 
     /** 随机唯一key，用于避免重复下单 */
     private String key;
@@ -27,4 +30,10 @@ public class OrderParam {
 
     /** 购买商品数量 */
     private int quantity;
+
+    private String description;
+
+    private String name;
+
+    private String image;
 }

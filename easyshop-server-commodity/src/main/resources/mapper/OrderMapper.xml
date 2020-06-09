@@ -29,11 +29,11 @@
     `order`
   WHERE
     user_id = #{userId}
-      <if test="ifAfter == true">
-        AND create_time &gt; #{createTime}
+      <if test="isAfter == true">
+        AND create_time &gt; #{timePoint}
       </if>
-      <if test="ifAfter == false">
-        AND create_time &lt; #{createTime}
+      <if test="isAfter == false">
+        AND create_time &lt; #{timePoint}
       </if>
   ORDER BY id DESC;
   </select>

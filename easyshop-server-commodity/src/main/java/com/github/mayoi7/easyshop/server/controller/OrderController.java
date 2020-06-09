@@ -70,17 +70,16 @@ public class OrderController {
      * @return 返回是否添加成功的响应（因为是异步下单，所以无法返回订单号）
      */
     @PostMapping("/list")
-    public ResponseResult<Void> listPlaceOrder(@RequestBody OrderList orders) {
-        List<OrderParam> orderParamList = orders.getOrders();
-        if (orderParamList == null || orderParamList.isEmpty()) {
+    public ResponseResult<Void> listPlaceOrder(@RequestBody List<OrderParam> orders) {
+        if (orders == null || orders.isEmpty()) {
             return new ResponseResult<>("列表为空", null);
         }
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
         Long userId = userService.findUserByName(name).getId();
 
         // 将OrderParam对象转换为OrderData对象
-        List<OrderData> orderDataList = new ArrayList<>(orderParamList.size());
-        orderParamList.forEach(orderParam -> {
+        List<OrderData> orderDataList = new ArrayList<>(orders.size());
+        orders.forEach(orderParam -> {
             orderDataList.add(new OrderData(orderParam, userId));
         });
         boolean result = orderService.placeOrders(orderDataList);
@@ -121,14 +120,18 @@ public class OrderController {
      * @param isAfter true：表示查询在时间点之后的数据；false：表示查询在时间点之前的数据
      * @return 返回订单详细数据列表
      */
-    @GetMapping("/list/{userId}")
-    public ResponseResult<List<OrderDetail>> findDetailList(@PathVariable(
+    @GetMapping("/list")
+    public ResponseResult<List<OrderDetail>> findDetailList(@RequestParam(
                     value = "userId", required = false) Long userId,
-                    @RequestParam("timePoint") Date timePoint,
-                    @RequestParam(value = "isAfter", defaultValue = "true") boolean isAfter) {
+                    @RequestParam(value = "timePoint", required = false) Date timePoint,
+                    @RequestParam(value = "isAfter", required = false, defaultValue = "false") boolean isAfter) {
         if (userId == null) {
             String name = SecurityContextHolder.getContext().getAuthentication().getName();
             userId = userService.findUserByName(name).getId();
+        }
+        // FIXME: 2020/6/9 时间有问题
+        if (timePoint == null) {
+            timePoint = new Date(System.currentTimeMillis());
         }
         List<OrderDetail> orderDetails = orderService.findDetailListByUserAndTime(userId, timePoint, isAfter);
         if (orderDetails == null) {
