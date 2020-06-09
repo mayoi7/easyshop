@@ -39,6 +39,7 @@ public class OrderData implements Serializable {
     private BigDecimal total;
 
     public OrderData(OrderParam param, Long userId) {
+        this.key = param.getKey();
         this.commodityId = param.getCommodityId();
         this.price = BigDecimal.valueOf(param.getPrice());
         this.quantity = param.getQuantity();

@@ -30,7 +30,7 @@ export default {
       })
     },
     refreshTotalAmount() {
-      this.$store.dispatch('count/trans').then(data => {
+      this.$store.dispatch('count/transTotal').then(data => {
         this.total = data
       })
     }

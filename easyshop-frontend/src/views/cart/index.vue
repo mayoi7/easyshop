@@ -68,115 +68,56 @@
 </template>
 
 <script>
+import { randomKey } from '@/utils/math'
 
 export default {
   name: "Cart",
   data() {
-    let $cart = this.$store.state.shop.cart;
-    for (let i=0; i<$cart.length; i++) {
-
-    }
-    return {
-      orders: [
-        {
-          id: 1,
-          name: 'aaa',
-          image: '@/images/test.png',
-          description: 'aaaaaaaaaaa',
-          price: 10.5,
-          quantity: 2,
-          time: '2019-09-09 10:35:12'
-        },
-        {
-          id: 2,
-          name: 'bbb',
-          image: '@/images/test.png',
-          description: 'bbbbbbbbbbb',
-          price: 11.5,
-          quantity: 0,
-          time: '2019-09-09 10:35:12'
-        },
-        {
-          id: 3,
-          name: 'ccc',
-          image: '@/images/test.png',
-          description: 'ccccccccccccc',
-          price: 12.5,
-          quantity: 3,
-          time: '2019-09-09 10:35:12'
-        },
-        {
-          id: 4,
-          name: 'ccc',
-          image: '@/images/test.png',
-          description: 'ccccccccccccc',
-          price: 12.5,
-          quantity: 3,
-          time: '2019-09-09 10:35:12'
-        },
-        {
-          id: 5,
-          name: 'ccc',
-          image: '@/images/test.png',
-          description: 'ccccccccccccc',
-          price: 12.5,
-          quantity: 3,
-          time: '2019-09-09 10:35:12'
-        },
-        {
-          id: 6,
-          name: 'ccc',
-          image: '@/images/test.png',
-          description: 'ccccccccccccc',
-          price: 12.5,
-          quantity: 3,
-          time: '2019-09-09 10:35:12'
-        },
-        {
-          id: 7,
-          name: 'ccc',
-          image: '@/images/test.png',
-          description: 'ccccccccccccc',
-          price: 12.5,
-          quantity: 3,
-          time: '2019-09-09 10:35:12'
-        },
-        {
-          id: 8,
-          name: 'ccc',
-          image: '@/images/test.png',
-          description: 'ccccccccccccc',
-          price: 12.5,
-          quantity: 3,
-          time: '2019-09-09 10:35:12'
-        },
-        {
-          id: 9,
-          name: 'ccc',
-          image: '@/images/test.png',
-          description: 'ccccccccccccc',
-          price: 12.5,
-          quantity: 3,
-          time: '2019-09-09 10:35:12'
+      this.$store.dispatch('shop/listCart').then(data => {
+        this.orders = [].concat(data);
+        for (let i=0; i<this.orders.length; i++) {
+          this.orders[i].key = randomKey();
         }
-      ],
-      selection: []
+      });
+    return {
+      orders: [],
+      selection: [],
+      toPost: {
+        orders: []
+      }
     }
   },
   methods: {
     handleSelection(val) {
       this.selection = val;
-      console.log(this.selection);
     },
     submit() {
-      console.log(this.selection);
+      let $orders = [];
+      console.log(this.selection)
+      for (let i = 0; i < this.selection.length; i++) {
+        let selected = this.selection[i];
+        let $order = {
+          key: selected.key,
+          commodityId: selected.commodityId,
+          price: selected.price,
+          quantity: selected.quantity
+        };
+        $orders.push($order);
+      }
+      this.toPost.orders = $orders;
+      this.$store.dispatch('order/postList', this.toPost.orders).then(msg => {
+        this.$message({
+          message: msg,
+          type: 'success'
+        });
+      });
     }
   },
   computed: {
     total_price() {
       let price = 0;
       for (let i = 0; i < this.selection.length; i++) {
-        price += this.selection[i].price * this.selection[i].quantity;
+        price += (this.selection[i].price * this.selection[i].quantity);
       }
       return price;
     },
