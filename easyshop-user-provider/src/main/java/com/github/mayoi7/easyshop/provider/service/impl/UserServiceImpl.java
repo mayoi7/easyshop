@@ -1,8 +1,10 @@
 package com.github.mayoi7.easyshop.provider.service.impl;
 
+import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.github.mayoi7.easyshop.constant.RedisKeys;
 import com.github.mayoi7.easyshop.po.User;
 import com.github.mayoi7.easyshop.provider.mapper.UserMapper;
+import com.github.mayoi7.easyshop.provider.service.fallback.UserServiceFallback;
 import com.github.mayoi7.easyshop.service.RedisService;
 import com.github.mayoi7.easyshop.service.UserService;
 import org.apache.dubbo.config.annotation.Reference;
@@ -27,6 +29,8 @@ public class UserServiceImpl implements UserService {
     private RedisService redisService;
 
     @Override
+    @SentinelResource(value = "findUserById",
+            blockHandlerClass = UserServiceFallback.class, blockHandler = "findUserByIdHandler")
     public User findUserById(Long id) {
         if (id == null) {
             return null;
