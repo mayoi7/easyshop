@@ -129,7 +129,6 @@ public class OrderController {
             String name = SecurityContextHolder.getContext().getAuthentication().getName();
             userId = userService.findUserByName(name).getId();
         }
-        // FIXME: 2020/6/9 时间有问题
         if (timePoint == null) {
             timePoint = new Date(System.currentTimeMillis());
         }
